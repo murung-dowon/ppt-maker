@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Market Strategy — 000</title>
+  <link rel="stylesheet" href="../core/theme.css">
+  <link rel="stylesheet" href="../core/slide-base.css">
+  <link rel="stylesheet" href="../core/editor.css">
+  <style>
+    /* ── 이 슬라이드 전용 오버라이드 ── */
+    .slide {
+      padding: 48px 64px 44px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    /* 헤더 영역 */
+    .slide-header-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .slide-header-row .eyebrow {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 6px;
+    }
+
+    .slide-header-row h1 {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--color-text);
+      line-height: 1.2;
+    }
+
+    .slide-header-row .logo-area {
+      text-align: right;
+      font-size: 12px;
+      color: var(--color-text-light);
+      line-height: 1.6;
+    }
+
+    .logo-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-text-muted);
+      letter-spacing: -0.01em;
+    }
+
+    /* 구분선 */
+    .header-divider {
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(to right, var(--color-accent) 120px, var(--color-border) 120px);
+      margin-bottom: 28px;
+      border-radius: 2px;
+    }
+
+    /* 2단 컬럼 */
+    .cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      flex: 1;
+      align-items: stretch;
+    }
+
+    .col-box {
+      border-radius: 16px;
+      padding: 32px 36px;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .col-box.accent-left {
+      background: var(--color-accent);
+    }
+
+    .col-box.accent-right {
+      background: #059669;
+    }
+
+    .col-box-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .col-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+      background: rgba(255,255,255,0.18);
+    }
+
+    .col-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+    }
+
+    .col-subtitle {
+      font-size: 12px;
+      color: rgba(255,255,255,0.7);
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    .item-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      flex: 1;
+      justify-content: space-evenly;
+    }
+
+    .item-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 16px;
+      line-height: 1.5;
+      color: #ffffff;
+      padding: 13px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .item-list li:last-child {
+      border-bottom: none;
+    }
+
+    .item-list li strong {
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .item-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      margin-top: 8px;
+      flex-shrink: 0;
+      background: rgba(255,255,255,0.7);
+    }
+
+    .item-sub {
+      font-size: 13px;
+      color: rgba(255,255,255,0.72);
+      margin-top: 3px;
+      line-height: 1.45;
+    }
+
+    /* 하단 키 메시지 바 */
+    .key-message {
+      margin-top: 20px;
+      background: var(--color-text);
+      border-radius: 10px;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .key-message .km-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      white-space: nowrap;
+    }
+
+    .km-arrow {
+      color: rgba(255,255,255,0.3);
+      font-size: 18px;
+    }
+
+    .km-phase {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .km-year {
+      font-size: 18px;
+      font-weight: 800;
+      color: white;
+      white-space: nowrap;
+    }
+
+    .km-desc {
+      font-size: 12px;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.4;
+    }
+
+    .km-sep {
+      width: 1px;
+      height: 32px;
+      background: rgba(255,255,255,0.15);
+      margin: 0 4px;
+    }
+  </style>
+</head>
+<body class="slide-body">
+
+  <div class="slide">
+
+    <!-- 헤더 -->
+    <div class="slide-header-row" data-anim="fade-in">
+      <div>
+        <p class="eyebrow">Partnership Strategy Update</p>
+        <h1>Market Replacement vs. New Market Expansion</h1>
+      </div>
+      <div class="logo-area">
+        <div class="logo-name">000</div>
+        <div>Confidential · 0000</div>
+      </div>
+    </div>
+
+    <div class="header-divider"></div>
+
+    <!-- 2단 컬럼 -->
+    <div class="cols">
+
+      <!-- 왼쪽: 기존 시장 대체 -->
+      <div class="col-box accent-left" data-anim="slide-up" data-delay="1">
+        <div class="col-box-header">
+          <div class="col-icon">🔄</div>
+          <div>
+            <div class="col-title">Existing Market Replacement</div>
+            <div class="col-subtitle">Competing with established automated trailer systems</div>
+          </div>
+        </div>
+
+        <ul class="item-list">
+          <li>
+            <span class="item-dot"></span>
+            <div>
+              <strong>WalkingFloor System</strong>
+              <div class="item-sub">Replacing traditional moving-floor unloading trailers</div>
+            </div>
+          </li>
+          <li>
+            <span class="item-dot"></span>
+            <div>
+              <strong>Bottom Trailer</strong>
+              <div class="item-sub">Targeting automated bottom-dump trailer operations</div>
+            </div>
+          </li>
+          <li>
+            <span class="item-dot"></span>
+            <div>
+              <strong>Other Automated Equipment Trailers</strong>
+              <div class="item-sub">Broader automation-ready trailer market segments</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 오른쪽: 신규 시장 확장 -->
+      <div class="col-box accent-right" data-anim="slide-up" data-delay="2">
+        <div class="col-box-header">
+          <div class="col-icon">🚀</div>
+          <div>
+            <div class="col-title">New Market Expansion</div>
+            <div class="col-subtitle">Unlocking adjacencies through Korean partner ecosystem</div>
+          </div>
+        </div>
+
+        <ul class="item-list">
+          <li>
+            <span class="item-dot"></span>
+            <div>
+              <strong>AMR Integration</strong>
+              <div class="item-sub">Connecting with Autonomous Mobile Robot systems for end-to-end logistics</div>
+            </div>
+          </li>
+          <li>
+            <span class="item-dot"></span>
+            <div>
+              <strong>Korean Partner Ecosystem</strong>
+              <div class="item-sub">000 and others — we'll share new business initiatives regularly</div>
+            </div>
+          </li>
+          <li>
+            <span class="item-dot"></span>
+            <div>
+              <strong>US Market Co-expansion</strong>
+              <div class="item-sub">We invite 000 to explore how these opportunities translate to the US market</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- 하단 키 메시지 -->
+    <div class="key-message" data-anim="fade-in" data-delay="3">
+      <span class="km-label">Roadmap</span>
+      <div class="km-phase">
+        <span class="km-year">— 0000</span>
+        <span class="km-desc">Complete product development &amp; readiness<br>for existing market replacement</span>
+      </div>
+      <div class="km-sep"></div>
+      <span class="km-arrow">→</span>
+      <div class="km-sep"></div>
+      <div class="km-phase">
+        <span class="km-year">0000 →</span>
+        <span class="km-desc">Full-scale expansion via industry expos<br>&amp; joint go-to-market with 000</span>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="../core/nav.js"></script>
+  <script src="../core/editor.js"></script>
+</body>
+</html>

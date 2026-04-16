@@ -47,4 +47,10 @@
     "description": "더글러스 엥겔바트의 작업 구분 3단계 — A/B/C 프레임워크 내부 피칭",
     "hasPresentation": true
   }
+  ,{
+    "id": "hufs-opensource-5w",
+    "name": "오픈소스SW 5주차 과제",
+    "description": "git rm --cached, 커밋 제외, 3/4번 과제",
+    "hasPresentation": true
+  }
 ]

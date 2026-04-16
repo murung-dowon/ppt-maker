@@ -4,7 +4,7 @@
 
 // ─── SLIDE_DATA (Claude Code가 자동 업데이트하는 영역) ──────────────────────
 // [SLIDE_DATA_START]
-const SLIDE_DATA = {"project":"week7-git","slides":[{"index":0,"file":"slide-01-terminal.html","layout":"layout-image","theme":"","elements":{"eyebrow":"1. Git Terminal","meta":"오픈소스 SW  |  201900614 김도원","title":"터미널 명령어 실행 결과","subtitle":"ls, cd, git remote -v 명령어 수행 후 캡처","placeholderLabel":"터미널 캡처 이미지 삽입"}},{"index":1,"file":"slide-02-github.html","layout":"layout-image","theme":"","elements":{"eyebrow":"2. Remote Repository","meta":"오픈소스 SW  |  201900614 김도원","title":"원격 저장소 Push 확인","subtitle":"c.txt 생성 후 GitHub 원격 저장소에 push한 결과","placeholderLabel":"GitHub 저장소 캡처 이미지 삽입"}},{"index":2,"file":"slide-03-conflict1.html","layout":"layout-two-col","theme":"","elements":{"eyebrow":"3. Git 협업 — 상황 1","title":"팀원과 다른 파일을 수정한 뒤 Push할 때","colTitles":["문제","해결"],"cards":[{"eyebrow":"Push 거부 발생","body":"팀원이 먼저 push했기 때문에 원격 저장소의 히스토리가 내 로컬보다 앞서 있는 상태. 파일 내용 충돌은 없지만 Git이 push를 거부합니다."},{"eyebrow":"Pull 후 다시 Push","body":"원격 변경사항을 먼저 받아온 뒤 push합니다.","code":"git pull\ngit push"}],"callout":"서로 다른 파일이므로 자동 병합 — 수동 수정 없이 바로 완료"}},{"index":3,"file":"slide-04-conflict2.html","layout":"layout-content","theme":"","elements":{"eyebrow":"4. Git 협업 — 상황 2","title":"팀원과 같은 파일을 수정한 뒤 Push할 때","steps":[{"num":"1","title":"git pull 실행","body":"원격 변경사항 가져오기 — 충돌 마커 자동 삽입됨"},{"num":"2","title":"파일 직접 편집","body":"충돌 마커 제거 후 최종 내용 확정"},{"num":"3","title":"병합 커밋 생성","body":"git add → git commit"},{"num":"4","title":"git push","body":"정상적으로 업로드 완료"}],"codeBlock":"<<<<<<< HEAD  (나의 수정 내용)\n=======\n팀원의 수정 내용\n>>>>>>> origin/main","callout":"충돌 마커를 제거하고 최종 내용만 남긴 뒤 커밋 — Git이 자동 병합 불가한 경우 반드시 수동 해결"}}]};
+const SLIDE_DATA = {"project":"hufs-opensource-5w","slides":[{"index":0,"file":"slide-01-q1.html","layout":"layout-content","theme":"theme-dark","elements":{"eyebrow":"오픈소스SW 5주차 과제","title":"1번 과제","cardLayout":"rows","cards":[{"badge":"결과","badgeStyle":"accent","eyebrow":"git rm --cached -f 실행 결과","title":"deleted: test.txt","body":"스테이지에서 deleted 마킹 / 워킹 디렉토리는 untracked 상태로 남음"},{"badge":"01","badgeStyle":"accent","eyebrow":"해결 방법 1","title":"git add test.txt","body":"현재 내용으로 다시 스테이지에 등록"},{"badge":"02","badgeStyle":"accent","eyebrow":"해결 방법 2","title":"git restore --staged test.txt","body":"staged의 deleted 취소 → unstaged modified 상태로 복원"}]}},{"index":1,"file":"slide-02-q2.html","layout":"layout-two-col","theme":"theme-dark","elements":{"eyebrow":"오픈소스SW 5주차 과제","title":"2번 과제","colTitles":["Method 01","Method 02"],"cards":[{"eyebrow":"스테이지에서 강제 제거","title":"git rm --cached a.txt","body":"파일은 워킹 디렉토리에 남고, 스테이지에서만 제거됨"},{"eyebrow":"add 취소","title":"git restore --staged a.txt","body":"git add를 취소하여 unstaged 상태로 되돌림"}],"callout":"두 방법 모두 a.txt를 커밋에서 제외할 수 있으나, 이미 추적 중인 파일이면 rm --cached 사용"}},{"index":2,"file":"slide-03-q34.html","layout":"layout-content","theme":"theme-dark","elements":{"eyebrow":"오픈소스SW 5주차 과제","title":"3번 & 4번 과제","steps":[{"num":"03","title":"3번 과제 스크린샷","body":"이미지를 삽입하세요","hasImage":true},{"num":"04","title":"4번 과제 스크린샷","body":"이미지를 삽입하세요","hasImage":true}]}}]};
 // [SLIDE_DATA_END]
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -104,9 +104,74 @@ function txt(p, x, y, w, content, size, font, fillHex, op=1, lh=140, tr=-2, alig
   p.appendChild(t); return t;
 }
 
+// Auto Layout 텍스트: x/y 없이 부모 프레임에 바로 append
+function txtAL(p, w, content, size, font, fillHex, op=1, lh=140, tr=-2, align='LEFT') {
+  if (!content && content !== 0) return null;
+  const t = figma.createText();
+  t.fontName = font; t.fontSize = size;
+  t.characters = String(content);
+  t.fills = [{ type:'SOLID', color:hex(fillHex), opacity:op }];
+  t.lineHeight   = { value:lh, unit:'PERCENT' };
+  t.letterSpacing = { value:tr, unit:'PERCENT' };
+  t.textAlignHorizontal = align;
+  if (w) { t.resize(w, 100); t.textAutoResize = 'HEIGHT'; }
+  else   { t.textAutoResize = 'WIDTH_AND_HEIGHT'; }
+  p.appendChild(t); return t;
+}
+
+// Auto Layout 프레임 생성
+function mkALFrame(name, mode='VERTICAL', spacing=0, pTop=0, pRight=0, pBottom=0, pLeft=0) {
+  const f = figma.createFrame();
+  f.name = name;
+  f.fills = [];
+  f.layoutMode = mode;
+  f.itemSpacing = spacing;
+  f.paddingTop    = pTop;
+  f.paddingRight  = pRight;
+  f.paddingBottom = pBottom;
+  f.paddingLeft   = pLeft;
+  f.primaryAxisSizingMode   = 'AUTO';
+  f.counterAxisSizingMode   = 'FIXED';
+  return f;
+}
+
+// Auto Layout 카드 프레임 (크기 고정, 내부 수직 정렬)
+function mkCardFrame(name, w, fillHex, op=1, r=12, strokeHex=null, sOp=1, pad=24) {
+  const f = figma.createFrame();
+  f.name = name;
+  f.fills = [{ type:'SOLID', color:hex(fillHex), opacity:op }];
+  if (r) f.cornerRadius = r;
+  if (strokeHex) {
+    f.strokes = [{ type:'SOLID', color:hex(strokeHex), opacity:sOp }];
+    f.strokeWeight = 1; f.strokeAlign = 'INSIDE';
+  }
+  f.layoutMode = 'VERTICAL';
+  f.itemSpacing = 6;
+  f.paddingTop    = pad;
+  f.paddingRight  = pad;
+  f.paddingBottom = pad;
+  f.paddingLeft   = pad;
+  f.primaryAxisSizingMode = 'AUTO';
+  f.counterAxisSizingMode = 'FIXED';
+  f.resize(Math.max(w, 1), 10);
+  return f;
+}
+
 function placeholder(p, x, y, w, h, label='Image') {
   const f = figma.createFrame();
   f.name = `[ ${label} ]`; f.x = x; f.y = y;
+  f.resize(Math.max(w,1), Math.max(h,1));
+  f.fills   = [{ type:'SOLID', color:hex('#888888'), opacity:0.08 }];
+  f.strokes = [{ type:'SOLID', color:hex('#888888'), opacity:0.3  }];
+  f.strokeWeight = 1; f.strokeAlign = 'INSIDE';
+  f.dashPattern = [6,4]; f.cornerRadius = 8;
+  p.appendChild(f); return f;
+}
+
+// 절대좌표 placeholder (Auto Layout 컨테이너 안에서 사용)
+function placeholderAL(p, w, h, label='Image') {
+  const f = figma.createFrame();
+  f.name = `[ ${label} ]`;
   f.resize(Math.max(w,1), Math.max(h,1));
   f.fills   = [{ type:'SOLID', color:hex('#888888'), opacity:0.08 }];
   f.strokes = [{ type:'SOLID', color:hex('#888888'), opacity:0.3  }];
@@ -129,23 +194,53 @@ function drawChips(f, chips, startX, y, C, fn) {
 // ─── 레이아웃 렌더러 ─────────────────────────────────────────────────────────
 
 function renderTitle(f, el, C, fn) {
-  // layout-title 전용 패딩: 80px top, 100px sides (slide-base.css 기준)
   const tPX = 100, tPY = 80;
-  // 우측 하단 장식 원 — CSS: right:-120 bottom:-120 width:480 height:480
+  // 장식 원 (절대좌표 유지)
   rct(f, W - 480 + 120, H - 480 + 120, 480, 480, C.accent, 0.08, 240);
-  let y = tPY;
-  // --font-size-small(16) + letter-spacing-wide(0.05em)
-  if (el.eyebrow) { txt(f, tPX, y, W-2*tPX, el.eyebrow, 16, fn.semi, C.accent, 1, 100, 50); y += 40; }
-  // --font-size-display(72) + line-height-tight(120%) + letter-spacing-tight(-3%)
-  if (el.title) {
-    const t = txt(f, tPX, y, 880, el.title, 72, fn.black, C.text, 1, 120, -3);
-    y += (t ? t.height : 160) + 40;
+
+  // 텍스트 컨텐츠 컨테이너: VERTICAL Auto Layout
+  const container = mkALFrame('title-content', 'VERTICAL', 0);
+  container.x = tPX; container.y = tPY;
+  container.resize(W - 2*tPX, 10);
+  f.appendChild(container);
+
+  if (el.eyebrow) {
+    const ew = txtAL(container, W-2*tPX, el.eyebrow, 16, fn.semi, C.accent, 1, 100, 50);
+    if (ew) { ew.layoutGrow = 0; }
   }
-  rct(f, tPX, y, 40, 2, C.text, 0.2); y += 24;
-  // --font-size-h3(28) + line-height-normal(160%)
-  if (el.subtitle) { txt(f, tPX, y, 640, el.subtitle, 28, fn.reg, C.muted, 1, 160, 0); y += 80; }
-  // --font-size-small(16)
-  if (el.meta)     { txt(f, tPX, y, 400, el.meta, 16, fn.reg, C.muted, 0.7, 100, 0); }
+
+  // eyebrow 아래 gap
+  if (el.eyebrow) {
+    const spacer1 = figma.createFrame();
+    spacer1.name = 'spacer'; spacer1.resize(1, 16); spacer1.fills = [];
+    container.appendChild(spacer1);
+  }
+
+  if (el.title) {
+    txtAL(container, 880, el.title, 72, fn.black, C.text, 1, 120, -3);
+    const spacer2 = figma.createFrame();
+    spacer2.name = 'spacer'; spacer2.resize(1, 32); spacer2.fills = [];
+    container.appendChild(spacer2);
+  }
+
+  // 구분선 (얇은 직사각형)
+  const divider = figma.createFrame();
+  divider.name = 'divider'; divider.resize(40, 2);
+  divider.fills = [{ type:'SOLID', color:hex(C.text), opacity:0.2 }];
+  container.appendChild(divider);
+
+  const spacer3 = figma.createFrame();
+  spacer3.name = 'spacer'; spacer3.resize(1, 16); spacer3.fills = [];
+  container.appendChild(spacer3);
+
+  if (el.subtitle) txtAL(container, 640, el.subtitle, 28, fn.reg, C.muted, 1, 160, 0);
+
+  if (el.meta) {
+    const spacer4 = figma.createFrame();
+    spacer4.name = 'spacer'; spacer4.resize(1, 24); spacer4.fills = [];
+    container.appendChild(spacer4);
+    txtAL(container, 400, el.meta, 16, fn.reg, C.muted, 0.7, 100, 0);
+  }
 }
 
 function renderSection(f, el, C, fn) {
@@ -291,84 +386,100 @@ function renderContent(f, el, C, fn) {
   }
 
   // ── CARDS ROWS (뱃지 + 가로 행) — cardLayout: "rows" ────────────────────
-  // HTML: .level-row { grid: 56px badge + 1fr card }, badge circle 56px, font h3(28)
-  // card: padding md(24) lg(40), label small(16), title h4(22), desc small(16)
   if (el.cards && el.cards.length && el.cardLayout === 'rows') {
     const BADGE = 56, BADGE_GAP = 24;
-    const cardW  = W - 2*PX - BADGE - BADGE_GAP;
-    const ROW_G  = 16;
-    const rowH   = Math.floor((bodyH - ROW_G*(el.cards.length-1)) / el.cards.length);
+    const cardW = W - 2*PX - BADGE - BADGE_GAP;
+    const ROW_G = 16;
+
+    // 행 컨테이너: Auto Layout VERTICAL
+    const rowsContainer = mkALFrame('rows', 'VERTICAL', ROW_G);
+    rowsContainer.resize(W - 2*PX, 10);
+    rowsContainer.x = PX; rowsContainer.y = bodyY;
+    f.appendChild(rowsContainer);
 
     el.cards.forEach((c, i) => {
-      const ry = bodyY + i*(rowH + ROW_G);
-      const bx = PX, cardX = PX + BADGE + BADGE_GAP;
-      const badgeCY = ry + rowH/2 - BADGE/2;
+      // 각 행: HORIZONTAL Auto Layout (뱃지 + 카드)
+      const rowFrame = mkALFrame(`row-${i}`, 'HORIZONTAL', BADGE_GAP);
+      rowFrame.counterAxisAlignItems = 'CENTER';
+      rowFrame.primaryAxisSizingMode = 'FIXED';
+      rowFrame.counterAxisSizingMode = 'AUTO';
+      rowFrame.resize(W - 2*PX, 10);
+      rowsContainer.appendChild(rowFrame);
 
-      // 뱃지 원
+      // 뱃지 원 (절대 크기 고정 프레임으로 표현)
       const bs = c.badgeStyle || 'muted';
-      const badgeBg     = bs === 'accent' ? C.accent : C.surface;
-      const badgeStroke = bs === 'accent' ? null      : C.border;
-      const badgeText   = bs === 'accent' ? '#ffffff' : (bs === 'outline' ? C.accent : C.muted);
-      rct(f, bx, badgeCY, BADGE, BADGE, badgeBg, 1, BADGE/2, badgeStroke, 0.8);
-      if (c.badge) txt(f, bx, badgeCY + (BADGE-28)/2, BADGE, c.badge, 28, fn.black, badgeText, 1, 100, -2, 'CENTER');
+      const badgeBg   = bs === 'accent' ? C.accent : C.surface;
+      const badgeStroke = bs === 'accent' ? null : C.border;
+      const badgeText = bs === 'accent' ? '#ffffff' : (bs === 'outline' ? C.accent : C.muted);
+      const badgeFrame = figma.createFrame();
+      badgeFrame.name = 'badge';
+      badgeFrame.resize(BADGE, BADGE);
+      badgeFrame.cornerRadius = BADGE / 2;
+      badgeFrame.fills = [{ type:'SOLID', color:hex(badgeBg) }];
+      if (badgeStroke) {
+        badgeFrame.strokes = [{ type:'SOLID', color:hex(badgeStroke), opacity:0.8 }];
+        badgeFrame.strokeWeight = 1; badgeFrame.strokeAlign = 'INSIDE';
+      }
+      badgeFrame.layoutMode = 'VERTICAL';
+      badgeFrame.primaryAxisAlignItems = 'CENTER';
+      badgeFrame.counterAxisAlignItems = 'CENTER';
+      badgeFrame.primaryAxisSizingMode = 'FIXED';
+      badgeFrame.counterAxisSizingMode = 'FIXED';
+      rowFrame.appendChild(badgeFrame);
+      if (c.badge) txtAL(badgeFrame, null, c.badge, 28, fn.black, badgeText, 1, 100, -2, 'CENTER');
 
-      // 카드 배경
+      // 카드 프레임 (Auto Layout)
       const isAccent = !!c.accent;
-      rct(f, cardX, ry, cardW, rowH, isAccent ? C.accentBg : C.surface, 1, 16,
-          isAccent ? C.accentLight : C.border, 0.8);
-
-      // 카드 내용 — 수직 중앙 정렬
-      const PAD = 24;
-      let ty = ry + PAD;
-      if (c.eyebrow) {
-        txt(f, cardX+PAD, ty, cardW-PAD*2, c.eyebrow, 13, fn.semi, C.accent, 1, 100, 50);
-        ty += 22;
-      }
-      if (c.title) {
-        const tt = txt(f, cardX+PAD, ty, cardW-PAD*2, c.title, 22, fn.bold, C.text, 1, 130, -2);
-        ty += (tt ? tt.height : 30) + 8;
-      }
-      if (c.body) txt(f, cardX+PAD, ty, cardW-PAD*2, c.body, 16, fn.reg, C.muted, 1, 160, 0);
+      const cardFrame = mkCardFrame(`card-${i}`, cardW,
+        isAccent ? C.accentBg : C.surface, 1, 16,
+        isAccent ? C.accentLight : C.border, 0.8, 24);
+      rowFrame.appendChild(cardFrame);
+      if (c.eyebrow) txtAL(cardFrame, cardW-48, c.eyebrow, 13, fn.semi, C.accent, 1, 100, 50);
+      if (c.title)   txtAL(cardFrame, cardW-48, c.title,   22, fn.bold, C.text,   1, 130, -2);
+      if (c.body)    txtAL(cardFrame, cardW-48, c.body,    16, fn.reg,  C.muted,  1, 160,  0);
     });
     return;
   }
 
   // ── CARDS GRID (+ 하단 chips) ─────────────────────────────────────────────
   if (el.cards && el.cards.length) {
-    const chipsH    = (el.chips && el.chips.length) ? 52 : 0;
-    const cardsAreaH = bodyH - chipsH - (chipsH ? 12 : 0);
-
     const n      = el.cards.length;
-    // 1~3 → 1행, 4~6 → 2행
     const perRow = n <= 3 ? n : Math.ceil(n / 2);
-    const rows   = Math.ceil(n / perRow);
     const g      = 16;
     const cw     = Math.floor((W - 2*PX - g*(perRow-1)) / perRow);
-    const ch     = Math.floor((cardsAreaH - g*(rows-1)) / rows);
 
-    el.cards.forEach((c, i) => {
-      const col = i % perRow;
-      const row = Math.floor(i / perRow);
-      const cx  = PX + col*(cw+g);
-      const cy  = bodyY + row*(ch+g);
+    // 그리드 컨테이너: HORIZONTAL wrap 역할을 VERTICAL rows로 구현
+    // 행별로 HORIZONTAL Auto Layout 프레임 생성
+    const gridContainer = mkALFrame('grid', 'VERTICAL', g);
+    gridContainer.resize(W - 2*PX, 10);
+    gridContainer.x = PX; gridContainer.y = bodyY;
+    gridContainer.primaryAxisSizingMode = 'AUTO';
+    f.appendChild(gridContainer);
 
-      rct(f, cx, cy, cw, ch, C.surface, 1, 12, C.border, 0.8);
-      let ty = cy + 24;
-      if (c.eyebrow) {
-        txt(f, cx+24, ty, cw-48, c.eyebrow, 13, fn.semi, C.accent, 1, 100, 18);
-        ty += 22;
+    // 행 단위로 그룹화
+    for (let r = 0; r < Math.ceil(n / perRow); r++) {
+      const rowFrame = mkALFrame(`grid-row-${r}`, 'HORIZONTAL', g);
+      rowFrame.primaryAxisSizingMode = 'FIXED';
+      rowFrame.counterAxisSizingMode = 'AUTO';
+      rowFrame.resize(W - 2*PX, 10);
+      gridContainer.appendChild(rowFrame);
+
+      for (let c = 0; c < perRow; c++) {
+        const idx = r * perRow + c;
+        if (idx >= n) break;
+        const card = el.cards[idx];
+        const cardFrame = mkCardFrame(`card-${idx}`, cw, C.surface, 1, 12, C.border, 0.8, 24);
+        rowFrame.appendChild(cardFrame);
+        if (card.eyebrow) txtAL(cardFrame, cw-48, card.eyebrow, 13, fn.semi, C.accent, 1, 100, 18);
+        if (card.title)   txtAL(cardFrame, cw-48, card.title,   18, fn.bold, C.text,   1, 130, -1);
+        if (card.body)    txtAL(cardFrame, cw-48, card.body,    15, fn.reg,  C.muted,  1, 150,  0);
       }
-      if (c.title) {
-        const tt = txt(f, cx+24, ty, cw-48, c.title, 18, fn.bold, C.text, 1, 130, -1);
-        ty += (tt ? tt.height : 26) + 6;
-      }
-      if (c.body) txt(f, cx+24, ty, cw-48, c.body, 15, fn.reg, C.muted, 1, 150, 0);
-    });
+    }
 
     // chips 띠
-    if (chipsH) {
-      const chipY = bodyY + cardsAreaH + 12;
-      drawChips(f, el.chips, PX, chipY, C, fn);
+    if (el.chips && el.chips.length) {
+      const chipsY = gridContainer.y + gridContainer.height + 12;
+      drawChips(f, el.chips, PX, chipsY, C, fn);
     }
     return;
   }
@@ -409,6 +520,14 @@ function renderTwoCol(f, el, C, fn) {
   const calloutH = el.callout ? 60 : 0;
   const bodyH = H - y - PY - (calloutH ? calloutH + 12 : 0);
 
+  // ── 컬럼 컨테이너: HORIZONTAL Auto Layout ────────────────────────────────
+  const colsContainer = mkALFrame('cols', 'HORIZONTAL', gap);
+  colsContainer.primaryAxisSizingMode = 'FIXED';
+  colsContainer.counterAxisSizingMode = 'AUTO';
+  colsContainer.resize(W - 2*PX, 10);
+  colsContainer.x = PX; colsContainer.y = y;
+  f.appendChild(colsContainer);
+
   // ── 2장 카드 → 좌/우 분할 렌더링 ────────────────────────────────────────────
   if (el.cards && el.cards.length === 2 && !el.list) {
     const CARD_STYLES = [
@@ -416,60 +535,102 @@ function renderTwoCol(f, el, C, fn) {
       { bg: '#eff6ff', border: '#bfdbfe', labelColor: C.accent  },
     ];
     el.cards.forEach((c, i) => {
-      const cx  = i === 0 ? PX : rx;
-      const cs  = CARD_STYLES[i];
+      const cs = CARD_STYLES[i];
       const colTitle = ct[i];
-      let ty = y;
-      if (colTitle) { txt(f, cx, ty, colW, colTitle, 13, fn.semi, cs.labelColor, 1, 100, 10); ty += 24; }
-      const cardH = bodyH - (colTitle ? 24 : 0);
-      rct(f, cx, ty, colW, cardH, cs.bg, 1, 12, cs.border, 1);
-      let iy = ty + 24;
-      if (c.eyebrow) { const t = txt(f, cx+20, iy, colW-40, c.eyebrow, 13, fn.semi, cs.labelColor, 1, 100, 10); iy += (t ? t.height : 18) + 10; }
-      if (c.title)   { const t = txt(f, cx+20, iy, colW-40, c.title,   22, fn.bold, C.text,        1, 130, -1); iy += (t ? t.height : 30) + 10; }
-      if (c.body)    { const t = txt(f, cx+20, iy, colW-40, c.body,    15, fn.reg,  C.muted,       1, 160,  0); iy += (t ? t.height : 60) + 14; }
+
+      // 컬럼 wrapper (VERTICAL)
+      const colWrap = mkALFrame(`col-${i}`, 'VERTICAL', 8);
+      colWrap.primaryAxisSizingMode = 'AUTO';
+      colWrap.counterAxisSizingMode = 'FIXED';
+      colWrap.resize(colW, 10);
+      colsContainer.appendChild(colWrap);
+
+      if (colTitle) txtAL(colWrap, colW, colTitle, 13, fn.semi, cs.labelColor, 1, 100, 10);
+
+      // 카드 Auto Layout
+      const cardFrame = mkCardFrame(`card-${i}`, colW, cs.bg, 1, 12, cs.border, 1, 20);
+      cardFrame.itemSpacing = 10;
+      colWrap.appendChild(cardFrame);
+
+      if (c.eyebrow) txtAL(cardFrame, colW-40, c.eyebrow, 13, fn.semi, cs.labelColor, 1, 100, 10);
+      if (c.title)   txtAL(cardFrame, colW-40, c.title,   22, fn.bold, C.text,        1, 130, -1);
+      if (c.body)    txtAL(cardFrame, colW-40, c.body,    15, fn.reg,  C.muted,       1, 160,  0);
       if (c.code) {
-        rct(f, cx+20, iy, colW-40, 56, '#1e293b', 1, 8);
-        txt(f, cx+36, iy+10, colW-72, c.code, 14, fn.semi, '#7dd3fc', 1, 160, 0);
+        const codeFrame = figma.createFrame();
+        codeFrame.name = 'code'; codeFrame.resize(colW-40, 56);
+        codeFrame.fills = [{ type:'SOLID', color:hex('#1e293b') }];
+        codeFrame.cornerRadius = 8;
+        codeFrame.layoutMode = 'VERTICAL';
+        codeFrame.paddingTop = 10; codeFrame.paddingLeft = 16; codeFrame.paddingRight = 16; codeFrame.paddingBottom = 10;
+        codeFrame.primaryAxisSizingMode = 'AUTO';
+        codeFrame.counterAxisSizingMode = 'FIXED';
+        cardFrame.appendChild(codeFrame);
+        txtAL(codeFrame, colW-72, c.code, 14, fn.semi, '#7dd3fc', 1, 160, 0);
       }
     });
   } else {
     // ── 원래 동작: 왼쪽=list, 오른쪽=cards ────────────────────────────────────
-    if (ct[0]) { txt(f, PX, y, colW, ct[0], 13, fn.semi, C.accent, 1, 100, 10); }
-    const lTop = y + (ct[0] ? 28 : 0);
+
+    // 왼쪽 컬럼
+    const leftCol = mkALFrame('left-col', 'VERTICAL', 8);
+    leftCol.primaryAxisSizingMode = 'AUTO';
+    leftCol.counterAxisSizingMode = 'FIXED';
+    leftCol.resize(colW, 10);
+    colsContainer.appendChild(leftCol);
+
+    if (ct[0]) txtAL(leftCol, colW, ct[0], 13, fn.semi, C.accent, 1, 100, 10);
     if (el.list && el.list.length) {
-      let ly = lTop;
       el.list.slice(0,5).forEach(item => {
-        rct(f, PX, ly+8, 8, 8, C.accent, 1, 4);
-        txt(f, PX+20, ly, colW-20, item, 16, fn.reg, C.text, 1, 160, 0);
-        ly += 40;
+        // bullet item: HORIZONTAL AL
+        const bulletRow = mkALFrame('bullet', 'HORIZONTAL', 12);
+        bulletRow.primaryAxisSizingMode = 'FIXED';
+        bulletRow.counterAxisSizingMode = 'AUTO';
+        bulletRow.counterAxisAlignItems = 'MIN';
+        bulletRow.resize(colW, 10);
+        leftCol.appendChild(bulletRow);
+        const dot = figma.createFrame();
+        dot.name = 'dot'; dot.resize(8, 8);
+        dot.cornerRadius = 4;
+        dot.fills = [{ type:'SOLID', color:hex(C.accent) }];
+        dot.layoutGrow = 0;
+        bulletRow.appendChild(dot);
+        txtAL(bulletRow, colW-20, item, 16, fn.reg, C.text, 1, 160, 0);
       });
     } else {
-      placeholder(f, PX, lTop, colW, bodyH-(ct[0]?28:0), 'Left');
+      placeholderAL(leftCol, colW, 200, 'Left');
     }
-    if (ct[1]) { txt(f, rx, y, colW, ct[1], 13, fn.semi, C.accent, 1, 100, 10); }
-    const rTop = y + (ct[1] ? 28 : 0);
+
+    // 오른쪽 컬럼
+    const rightCol = mkALFrame('right-col', 'VERTICAL', 12);
+    rightCol.primaryAxisSizingMode = 'AUTO';
+    rightCol.counterAxisSizingMode = 'FIXED';
+    rightCol.resize(colW, 10);
+    colsContainer.appendChild(rightCol);
+
+    if (ct[1]) txtAL(rightCol, colW, ct[1], 13, fn.semi, C.accent, 1, 100, 10);
     if (el.cards && el.cards.length) {
-      let cy = rTop;
-      const ch = Math.min((bodyH-(ct[1]?28:0)) / el.cards.length - 12, 120);
-      el.cards.slice(0,4).forEach(c => {
-        rct(f, rx, cy, colW, ch, C.surface, 1, 10, C.border, 0.8);
-        let ty = cy + 18;
-        if (c.eyebrow) { txt(f, rx+18, ty, colW-36, c.eyebrow, 12, fn.semi, C.accent, 1, 100, 10); ty += 20; }
-        if (c.title)   { txt(f, rx+18, ty, colW-36, c.title,   17, fn.semi, C.text,   1, 130, -1); ty += 28; }
-        if (c.body)    { txt(f, rx+18, ty, colW-36, c.body,    14, fn.reg,  C.muted,  1, 150,  0); }
-        cy += ch + 12;
+      el.cards.slice(0,4).forEach((c, ci) => {
+        const cardFrame = mkCardFrame(`card-${ci}`, colW, C.surface, 1, 10, C.border, 0.8, 18);
+        cardFrame.itemSpacing = 6;
+        rightCol.appendChild(cardFrame);
+        if (c.eyebrow) txtAL(cardFrame, colW-36, c.eyebrow, 12, fn.semi, C.accent, 1, 100, 10);
+        if (c.title)   txtAL(cardFrame, colW-36, c.title,   17, fn.semi, C.text,   1, 130, -1);
+        if (c.body)    txtAL(cardFrame, colW-36, c.body,    14, fn.reg,  C.muted,  1, 150,  0);
       });
     } else {
-      placeholder(f, rx, rTop, colW, bodyH-(ct[1]?28:0), 'Right');
+      placeholderAL(rightCol, colW, 200, 'Right');
     }
   }
 
-  // ── Callout ────────────────────────────────────────────────────────────────
+  // ── Callout (하단 고정) ───────────────────────────────────────────────────
   if (el.callout) {
-    const cy = H - PY - calloutH;
-    rct(f, PX, cy, W-2*PX, calloutH, C.accentBg, 1, 8, C.border, 0.5);
-    rct(f, PX, cy, 4, calloutH, C.accent, 1);
-    txt(f, PX+20, cy+18, W-2*PX-36, el.callout, 16, fn.semi, C.text, 1, 130, 0);
+    const calloutFrame = mkCardFrame('callout', W-2*PX, C.accentBg, 1, 8, C.border, 0.5, 18);
+    calloutFrame.x = PX;
+    calloutFrame.y = H - PY - calloutH;
+    f.appendChild(calloutFrame);
+    // 왼쪽 강조 바: 절대좌표로 슬라이드에 직접 추가
+    rct(f, PX, H - PY - calloutH, 4, calloutH, C.accent, 1);
+    txtAL(calloutFrame, W-2*PX-36, el.callout, 16, fn.semi, C.text, 1, 130, 0);
   }
 }
 
@@ -497,25 +658,49 @@ function renderImage(f, el, C, fn) {
 }
 
 function renderClosing(f, el, C, fn) {
-  // layout-closing: bg=color-text, text-align center
-  // closing-title: --font-size-h1(52) black, closing-subtitle: --font-size-h3(28) light
   f.fills = [{ type:'SOLID', color:hex(C.text) }];
   const W_ = C.bg;
-  let y = H/2 - 90;
-  if (el.title)    { const t = txt(f, 0, y, W, el.title,    52, fn.black, W_, 1,   120, -3, 'CENTER'); y += (t ? t.height : 74) + 20; }
-  if (el.subtitle) { const t = txt(f, 0, y, W, el.subtitle, 28, fn.reg,   W_, 0.55, 160, 0, 'CENTER'); y += (t ? t.height : 40) + 36; }
-  // chips — 전체 너비 계산 후 가운데 배치
+
+  // 중앙 정렬 컨테이너: VERTICAL Auto Layout
+  const container = mkALFrame('closing-content', 'VERTICAL', 20);
+  container.primaryAxisAlignItems = 'CENTER';
+  container.counterAxisAlignItems = 'CENTER';
+  container.primaryAxisSizingMode = 'AUTO';
+  container.counterAxisSizingMode = 'FIXED';
+  container.resize(W, 10);
+  f.appendChild(container);
+
+  if (el.title)    txtAL(container, W, el.title,    52, fn.black, W_, 1,    120, -3, 'CENTER');
+  if (el.subtitle) txtAL(container, W, el.subtitle, 28, fn.reg,   W_, 0.55, 160,  0, 'CENTER');
+
+  // chips — HORIZONTAL Auto Layout
   if (el.chips && el.chips.length) {
-    const chipW   = chip => chip.length * 9 + 40;
-    const totalW  = el.chips.reduce((s, c) => s + chipW(c) + 12, -12);
-    let cx = Math.max(PX, (W - totalW) / 2);
+    const chipsRow = mkALFrame('chips', 'HORIZONTAL', 12);
+    chipsRow.primaryAxisSizingMode = 'AUTO';
+    chipsRow.counterAxisSizingMode = 'AUTO';
+    container.appendChild(chipsRow);
+
+    const chipW = chip => chip.length * 9 + 40;
     el.chips.forEach(chip => {
       const cw = chipW(chip);
-      rct(f, cx, y, cw, 40, '#ffffff', 0.08, 20);
-      txt(f, cx+16, y+11, cw-32, chip, 14, fn.reg, W_, 0.7, 100, 0);
-      cx += cw + 12;
+      const chipFrame = figma.createFrame();
+      chipFrame.name = chip; chipFrame.resize(cw, 40);
+      chipFrame.cornerRadius = 20;
+      chipFrame.fills = [{ type:'SOLID', color:hex('#ffffff'), opacity:0.08 }];
+      chipFrame.layoutMode = 'VERTICAL';
+      chipFrame.primaryAxisAlignItems = 'CENTER';
+      chipFrame.counterAxisAlignItems = 'CENTER';
+      chipFrame.primaryAxisSizingMode = 'FIXED';
+      chipFrame.counterAxisSizingMode = 'FIXED';
+      chipsRow.appendChild(chipFrame);
+      txtAL(chipFrame, cw-32, chip, 14, fn.reg, W_, 0.7, 100, 0, 'CENTER');
     });
   }
+
+  // 수직 중앙: constraints CENTER로 설정
+  container.constraints = { horizontal: 'CENTER', vertical: 'CENTER' };
+  container.x = 0;
+  container.y = H / 2 - 100; // 초기 추정값; Figma가 constraints로 자동 조정
 }
 
 function renderSlide(slide, idx) {

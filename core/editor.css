@@ -171,6 +171,16 @@ body.editor-active .slide-body {
   flex-shrink: 0;
 }
 
+/* ── 저장 버튼 ──────────────────────────────────────────── */
+.tb-btn-save {
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+  font-weight: 700;
+}
+
+.tb-btn-save:hover { background: #dcfce7 !important; }
+
 /* ── 편집 모드 닫기 버튼 (툴바 우측 끝) ─────────────────── */
 #tb-close {
   margin-left: auto;
@@ -180,6 +190,14 @@ body.editor-active .slide-body {
 }
 
 #tb-close:hover { background: #fee2e2; color: #ef4444; }
+
+/* ── 인쇄/PDF 준비 상태 — JS에서 class 추가, @media print에서도 적용 ── */
+.print-ready {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+}
 
 
 /* ── 편집 모드 활성 시 슬라이드 강조 ───────────────────── */
@@ -198,58 +216,6 @@ body.editor-active [data-editable]:focus {
   background: rgba(37, 99, 235, 0.03);
   border-radius: 2px;
 }
-
-
-/* ── 애니메이션 드롭다운 ────────────────────────────────── */
-#anim-panel {
-  position: fixed;
-  top: 48px;
-  z-index: 400;
-  display: none;
-  flex-direction: column;
-  gap: 4px;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-top: none;
-  border-radius: 0 0 12px 12px;
-  padding: 10px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  min-width: 160px;
-}
-
-#anim-panel.open {
-  display: flex;
-}
-
-.anim-title {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #9ca3af;
-  margin-bottom: 2px;
-  padding: 0 4px;
-}
-
-.anim-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 10px;
-  border-radius: 7px;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  font-size: 13px;
-  color: #374151;
-  font-family: var(--font-sans);
-  transition: background 0.12s;
-  text-align: left;
-  white-space: nowrap;
-}
-
-.anim-btn:hover { background: #f3f4f6; color: #2563eb; }
-.anim-btn .anim-icon { font-size: 15px; width: 18px; text-align: center; }
 
 
 /* ── 리사이즈 핸들 ─────────────────────────────────────── */

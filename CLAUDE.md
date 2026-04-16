@@ -98,11 +98,51 @@ PPT 요청 시 아래 원칙을 반드시 적용한다.
 ---
 
 ## 새 프로젝트 시작 체크리스트
-1. 폴더 생성 + `slides.json` 작성
+1. 폴더 생성 + `slides.json` 작성 (포맷: `[{ "file": "...", "title": "..." }]`)
 2. 슬라이드 구성: title → section → content × N → closing
 3. 섹션 슬라이드로 챕터 나누기 (3~5분 단위)
 4. 각 content 슬라이드: 제목 + title-bar + 본문 구조 유지
-5. 빌드 후 `dist/presentation.html` 확인
+5. 빌드: `node core/build.js --project [project-name]`
+6. `projects.json`에 프로젝트 등록 (아래 완료 워크플로우 참고)
+7. 로컬 서버 띄우고 접속 링크 안내
+
+---
+
+## PPT 완성 후 필수 워크플로우
+
+PPT 슬라이드 제작이 완료되면 **반드시** 아래 순서를 따른다.
+
+### 1단계: projects.json 등록
+
+루트의 `projects.json`에 새 프로젝트를 추가한다:
+
+```json
+{
+  "id": "project-folder-name",
+  "name": "표시 이름",
+  "description": "한 줄 설명",
+  "hasPresentation": true
+}
+```
+
+`hasPresentation`은 빌드(`dist/presentation.html`)가 존재하면 `true`.
+
+### 2단계: 로컬 서버 확인 및 링크 안내
+
+아래 명령으로 서버가 실행 중인지 확인하고, 없으면 띄운다:
+
+```bash
+# 포트 3000 사용 중인지 확인
+lsof -ti:3000
+
+# 서버가 없으면 백그라운드로 실행 (루트 디렉토리에서)
+node server.js &
+```
+
+서버가 준비되면 사용자에게 아래 두 링크를 안내한다:
+
+- **전체 목록**: `http://localhost:3000/`
+- **새 PPT 바로보기**: `http://localhost:3000/[project-name]/dist/presentation.html`
 
 ---
 
@@ -139,29 +179,97 @@ PPT 요청 시 아래 원칙을 반드시 적용한다.
 
 ### 1단계: 슬라이드 데이터 추출
 
-`core/to-figma-json.js`의 파싱 로직을 참고해 대상 프로젝트의 모든 슬라이드를 읽고
-아래 형태의 JSON 오브젝트를 직접 구성한다 (스크립트 실행 없이 코드로 처리):
+대상 프로젝트의 모든 슬라이드 HTML을 읽고 아래 **표준 스키마**에 맞춰 JSON을 직접 구성한다.
+스크립트 실행 없이 코드로 처리한다.
+
+#### SLIDE_DATA 표준 스키마 (반드시 이 필드명을 사용할 것)
 
 ```json
 {
-  "project": "프로젝트명",
+  "project": "프로젝트폴더명",
   "slides": [
     {
       "index": 0,
       "file": "slide-01-title.html",
       "layout": "layout-title",
-      "theme": "theme-dark",
-      "elements": {
-        "eyebrow": "섹션명",
-        "title": "슬라이드 제목",
-        "subtitle": "부제목",
-        "authorName": "이름",
-        "authorRole": "직함"
-      }
+      "theme": "theme-warm",
+      "elements": { ... }
     }
   ]
 }
 ```
+
+**레이아웃별 `elements` 필드 명세:**
+
+| 레이아웃 | 필드 |
+|---|---|
+| `layout-title` | `eyebrow`, `title`, `subtitle`, `meta` |
+| `layout-section` | `sectionLabel`, `title`, `desc` |
+| `layout-quote` | `quote`, `source` |
+| `layout-closing` | `title`, `subtitle`, `chips?: string[]` |
+| `layout-content` | `eyebrow?`, `title?` + 아래 본문 타입 중 1개 |
+| `layout-two-col` | `eyebrow?`, `title?`, `colTitles?: [string,string]`, `list?`, `cards?` |
+
+**`layout-content` 본문 타입 (택 1):**
+
+```jsonc
+// 타입 A-1 — 카드 행 스택 (뱃지 원 + 가로 카드, 3개 이하 권장)
+// HTML의 .level-row 패턴과 동일. 아이콘 느낌의 레벨/단계 설명에 사용
+{
+  "cardLayout": "rows",
+  "cards": [
+    {
+      "badge": "C",           // 뱃지 원 안에 표시할 글자
+      "badgeStyle": "accent", // "accent"(채운 원) | "outline"(테두리 원) | "muted"(회색 원)
+      "accent": true,         // true면 카드 배경이 accent 색조
+      "eyebrow": "레이블",
+      "title": "제목",
+      "body": "설명"
+    }
+  ]
+}
+
+// 타입 A-2 — 카드 그리드 (1~6개, 자동 배치)
+// 하단 칩 띠 추가 가능
+{
+  "cards": [{ "eyebrow": "레이블", "title": "제목", "body": "설명" }],
+  "chips": ["칩1", "칩2"]          // 선택
+}
+
+// 타입 B — 수치 강조 + 항목 리스트
+{
+  "stat": "84%",
+  "statLabel": "설명 텍스트",
+  "callout": "한 줄 인사이트",     // 선택
+  "items": ["항목1", "항목2"]      // 우측 리스트
+}
+
+// 타입 C — 흐름 단계 (이미지 플레이스홀더 포함 가능)
+// 하단 callout 추가 가능
+{
+  "steps": [
+    { "num": "01", "title": "단계명", "body": "설명", "hasImage": true }
+  ],
+  "callout": "한 줄 인사이트"      // 선택
+}
+
+// 타입 D — 불릿 리스트
+{ "list": ["항목1", "항목2"] }
+
+// 타입 E — 콜아웃 단독
+{ "callout": "핵심 메시지" }
+```
+
+**절대 쓰지 말 것 (구버전 필드명 — 렌더러가 인식 못함):**
+
+| ❌ 구 필드명 | ✅ 표준 필드명 |
+|---|---|
+| `c.desc`, `c.name`, `c.dept`, `c.task`, `c.label` | `c.body`, `c.title`, `c.eyebrow` |
+| `el.quoteText`, `el.quoteSource` | `el.quote`, `el.source` |
+| `el.sectionDesc` | `el.desc` |
+| `el.listItems` | `el.list` |
+| `el.tools` | `el.chips` |
+| `el.closingTitle`, `el.closingSubtitle` | `el.title`, `el.subtitle` |
 
 ### 2단계: figma-plugin/code.js 업데이트
 
@@ -184,3 +292,21 @@ code.js 업데이트 후 아래 내용을 안내한다:
 > → `figma-plugin/manifest.json` 선택)
 
 **주의**: SLIDE_DATA에 들어가는 텍스트는 HTML 태그 없이 순수 텍스트만. 특수문자는 JS 문자열 이스케이프 적용.
+
+---
+
+## Figma 폰트 주의사항
+
+Figma 플러그인(`figma-plugin/code.js`)은 **Noto Sans KR**을 기본 폰트로 사용한다.
+
+- **이유**: Inter는 한글 글리프가 없어 한국어 텍스트가 더블클릭 전까지 표시되지 않음
+- **Noto Sans KR**은 Figma에 기본 내장되어 있으며 한글을 즉시 렌더링함
+- `F` 객체를 절대 `Inter`로 되돌리지 말 것
+
+사용 중인 폰트 가중치 (Noto Sans KR 기준):
+| 용도 | style |
+|---|---|
+| `reg` | Regular |
+| `med`, `semi` | Medium |
+| `bold` | Bold |
+| `black` | Black |

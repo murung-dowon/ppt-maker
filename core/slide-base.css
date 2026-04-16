@@ -525,4 +525,16 @@ body:hover #slide-nav {
   #editor-toast {
     display: none !important;
   }
+
+  /* 애니메이션 완전 비활성화 —
+     data-anim 요소는 animation-fill-mode:both 로 opacity:0 에서 시작.
+     인쇄 시 아직 animation이 끝나지 않았거나 재실행 중이면 내용이 투명하게 찍힘. */
+  [data-anim],
+  [data-delay],
+  .print-ready {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
 }

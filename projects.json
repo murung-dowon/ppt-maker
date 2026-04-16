@@ -1,0 +1,38 @@
+[
+  {
+    "id": "demo",
+    "name": "Demo",
+    "description": "레이아웃 & 컴포넌트 쇼케이스",
+    "hasPresentation": true
+  },
+  {
+    "id": "kic-speedfloor",
+    "name": "KIC SpeedFloor",
+    "description": "KIC 발표 — SpeedFloor 미국 진출",
+    "hasPresentation": true
+  },
+  {
+    "id": "notion-demo",
+    "name": "Notion Demo",
+    "description": "Notion 블록 기반 슬라이드 예시",
+    "hasPresentation": true
+  },
+  {
+    "id": "m-company",
+    "name": "M Company",
+    "description": "시장 전략 개요",
+    "hasPresentation": false
+  },
+  {
+    "id": "us-deployment",
+    "name": "US Deployment",
+    "description": "미국 배포 로드맵",
+    "hasPresentation": false
+  },
+  {
+    "id": "internal-pitch",
+    "name": "내부 피칭",
+    "description": "더글러스 엥겔바트의 A/B/C 작업 프레임워크 — 일하는 방식 개선 제안",
+    "hasPresentation": true
+  }
+]

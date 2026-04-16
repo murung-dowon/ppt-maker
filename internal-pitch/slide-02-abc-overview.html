@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>A/B/C 작업 개요</title>
+  <link rel="stylesheet" href="../core/theme.css">
+  <link rel="stylesheet" href="../core/slide-base.css">
+  <link rel="stylesheet" href="../core/editor.css">
+  <style>
+    .level-stack {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .level-row {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      align-items: center;
+      gap: var(--space-md);
+    }
+    .level-badge {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--font-size-h3);
+      font-weight: var(--font-weight-black);
+      flex-shrink: 0;
+    }
+    .level-badge.c { background: var(--color-accent); color: white; }
+    .level-badge.b { background: var(--color-surface-2); color: var(--color-accent); border: 2px solid var(--color-border-dark); }
+    .level-badge.a { background: var(--color-surface); color: var(--color-text-muted); border: 2px solid var(--color-border); }
+    .level-card {
+      border-radius: var(--radius-lg);
+      padding: var(--space-md) var(--space-lg);
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+    }
+    .level-card.c {
+      background: var(--color-accent-bg);
+      border-color: var(--color-accent-light);
+    }
+    .level-label {
+      font-size: var(--font-size-small);
+      font-weight: var(--font-weight-semibold);
+      letter-spacing: var(--letter-spacing-wide);
+      text-transform: uppercase;
+      color: var(--color-text-light);
+      margin-bottom: 4px;
+    }
+    .level-title {
+      font-size: var(--font-size-h4);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text);
+      margin-bottom: 4px;
+    }
+    .level-desc {
+      font-size: var(--font-size-small);
+      color: var(--color-text-muted);
+      line-height: var(--line-height-normal);
+    }
+  </style>
+</head>
+<body class="slide-body">
+
+  <div class="slide layout-content theme-warm">
+
+    <p class="slide-eyebrow">더글러스 엥겔바트</p>
+    <h1 class="slide-title">작업의 3단계</h1>
+    <div class="slide-title-bar"></div>
+
+    <div class="slide-body-content">
+      <div class="level-stack">
+
+        <div class="level-row" data-anim="slide-up" data-delay="2">
+          <div class="level-badge c">C</div>
+          <div class="level-card c">
+            <div class="level-label">C 작업</div>
+            <div class="level-title">일하는 방식을 발전시키는 일</div>
+            <div class="level-desc">우리가 자꾸 발전할 수 있는 체계를 만드는 일 — B 작업 자체를 더 잘할 수 있게 설계</div>
+          </div>
+        </div>
+
+        <div class="level-row" data-anim="slide-up" data-delay="3">
+          <div class="level-badge b">B</div>
+          <div class="level-card">
+            <div class="level-label">B 작업</div>
+            <div class="level-title">일하는 방식을 개선하는 일</div>
+            <div class="level-desc">해야 하는 일을 더 잘할 수 있게 설계하는 일 — 자동화, 템플릿, 프로세스 재정비</div>
+          </div>
+        </div>
+
+        <div class="level-row" data-anim="slide-up" data-delay="4">
+          <div class="level-badge a">A</div>
+          <div class="level-card">
+            <div class="level-label">A 작업</div>
+            <div class="level-title">개인이 원래 해야 하는 일</div>
+            <div class="level-desc">각자 해야 하는 일 알아서 잘 하기 — 사업 기획, 물류, 마케팅, 영업, 경영지원</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script src="../core/nav.js"></script>
+  <script src="../core/editor.js"></script>
+</body>
+</html>

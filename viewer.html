@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>슬라이드 뷰어</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #0f1117;
+      --surface:    #1a1d27;
+      --border:     #2e3347;
+      --text:       #e8eaf0;
+      --text-muted: #8b90a8;
+      --text-light: #565c7a;
+      --accent:     #2563eb;
+      --accent-light: #3b82f6;
+      --nav-h:      48px;
+      --font: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      font-family: var(--font);
+      background: var(--bg);
+    }
+
+    /* ── Nav bar ── */
+    #nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0;
+      z-index: 9999;
+      padding: 0 16px;
+    }
+
+    .nav-back {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 12px;
+      border-radius: 7px;
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 500;
+      transition: background 0.12s, color 0.12s;
+      flex-shrink: 0;
+    }
+
+    .nav-back:hover {
+      background: #2e3347;
+      color: var(--text);
+    }
+
+    .nav-back svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .nav-divider {
+      width: 1px;
+      height: 20px;
+      background: var(--border);
+      margin: 0 12px;
+      flex-shrink: 0;
+    }
+
+    .nav-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .nav-project {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .nav-sep {
+      font-size: 13px;
+      color: var(--text-light);
+      flex-shrink: 0;
+    }
+
+    .nav-file {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .nav-spacer { flex: 1; }
+
+    .nav-open-new {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 11px;
+      border-radius: 7px;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 500;
+      font-family: var(--font);
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.12s, color 0.12s;
+      flex-shrink: 0;
+    }
+
+    .nav-open-new:hover {
+      border-color: var(--accent-light);
+      color: var(--accent-light);
+    }
+
+    .nav-open-new svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    /* ── iframe ── */
+    #frame {
+      position: fixed;
+      top: var(--nav-h);
+      left: 0; right: 0; bottom: 0;
+      width: 100%;
+      height: calc(100% - var(--nav-h));
+      border: none;
+      background: #fff;
+    }
+
+    /* ── Error state ── */
+    #error {
+      display: none;
+      position: fixed;
+      top: var(--nav-h);
+      left: 0; right: 0; bottom: 0;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 12px;
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+
+    #error.show { display: flex; }
+
+    #error .err-icon {
+      font-size: 40px;
+      color: var(--text-light);
+    }
+
+    #error a {
+      color: var(--accent-light);
+      font-size: 13px;
+      text-decoration: none;
+    }
+
+    #error a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<nav id="nav">
+  <a class="nav-back" href="index.html" id="backBtn">
+    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 2L4 7l5 5"/>
+    </svg>
+    목록으로
+  </a>
+  <div class="nav-divider"></div>
+  <div class="nav-breadcrumb">
+    <span class="nav-project" id="navProject">—</span>
+    <span class="nav-sep">/</span>
+    <span class="nav-file" id="navFile">—</span>
+  </div>
+  <div class="nav-spacer"></div>
+  <a class="nav-open-new" id="openNewBtn" href="#" target="_blank" title="새 탭에서 열기">
+    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 2H2v8h8V7"/>
+      <path d="M8 1h3v3"/>
+      <path d="M11 1L6 6"/>
+    </svg>
+    새 탭
+  </a>
+</nav>
+
+<iframe id="frame" src="about:blank" allowfullscreen></iframe>
+
+<div id="error">
+  <div class="err-icon">⚠</div>
+  <div id="errorMsg">파일을 불러올 수 없습니다.</div>
+  <a href="index.html">← 목록으로 돌아가기</a>
+</div>
+
+<script>
+  const params = new URLSearchParams(location.search);
+  const project = params.get('project') || '';
+  const file    = params.get('file')    || '';
+
+  const navProject = document.getElementById('navProject');
+  const navFile    = document.getElementById('navFile');
+  const frame      = document.getElementById('frame');
+  const openNewBtn = document.getElementById('openNewBtn');
+  const errorEl    = document.getElementById('error');
+  const errorMsg   = document.getElementById('errorMsg');
+
+  if (!project || !file) {
+    errorMsg.textContent = 'project 또는 file 파라미터가 없습니다.';
+    errorEl.classList.add('show');
+    frame.style.display = 'none';
+  } else {
+    // 경로 조합 — 상위 디렉토리 탈출 방지
+    const safePath = `${project}/${file}`.replace(/\.\.\//g, '');
+
+    navProject.textContent = decodeURIComponent(project);
+    navFile.textContent    = decodeURIComponent(file);
+    document.title         = `${decodeURIComponent(project)} — ${decodeURIComponent(file)}`;
+
+    openNewBtn.href = safePath;
+    frame.src       = safePath;
+
+    frame.addEventListener('error', () => {
+      errorMsg.textContent = `'${safePath}' 파일을 불러올 수 없습니다.`;
+      errorEl.classList.add('show');
+      frame.style.display = 'none';
+    });
+  }
+</script>
+</body>
+</html>

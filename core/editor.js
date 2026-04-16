@@ -5,8 +5,9 @@
  * 기능:
  *  - 텍스트 인라인 편집 (contenteditable)
  *  - Bold / Italic / Underline / 폰트 크기 / 색상
- *  - 애니메이션 6종 적용
+ *  - localStorage 저장 (새로고침 후에도 유지)
  *  - Undo / Redo (Ctrl+Z / Ctrl+Y)
+ *  - PDF 내보내기 (애니메이션 리셋 후 인쇄)
  *  - HTML 내보내기
  */
 (function () {
@@ -14,20 +15,63 @@
 
   // ── 상태 ──────────────────────────────────────────────
   let isEditorActive = false;
-  const history = [];  // undo 스택
-  const redoStack = []; // redo 스택
+  const history = [];
+  const redoStack = [];
   const MAX_HISTORY = 50;
+
+  // localStorage 키: 슬라이드 파일마다 독립 저장
+  const STORAGE_KEY = 'slide-edit:' + location.pathname;
+  let isDirty = false;
 
   // ── DOM 준비 후 초기화 ────────────────────────────────
   document.addEventListener('DOMContentLoaded', init);
 
   function init() {
+    loadFromStorage();   // 저장된 내용 복원
     buildToggleButton();
     buildToolbar();
-    buildAnimPanel();
     buildToast();
     attachKeyboard();
     markEditableElements();
+  }
+
+  // ── localStorage 저장 / 복원 ──────────────────────────
+  function loadFromStorage() {
+    const slide = document.querySelector('.slide');
+    if (!slide) return;
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      slide.innerHTML = saved;
+      markEditableElements();
+    }
+  }
+
+  function saveToStorage() {
+    const slide = document.querySelector('.slide');
+    if (!slide) return;
+    localStorage.setItem(STORAGE_KEY, slide.innerHTML);
+    isDirty = false;
+    updateSaveBtn();
+    showToast('저장됨 ✓');
+  }
+
+  function markDirty() {
+    if (!isDirty) {
+      isDirty = true;
+      updateSaveBtn();
+    }
+  }
+
+  function updateSaveBtn() {
+    const btn = document.getElementById('tb-save');
+    if (!btn) return;
+    if (isDirty) {
+      btn.innerHTML = '💾 저장 <span style="color:#d97706;font-size:15px;line-height:1;">*</span>';
+      btn.title = '저장되지 않은 변경사항이 있습니다 (Ctrl+S)';
+    } else {
+      btn.innerHTML = '💾 저장';
+      btn.title = '변경사항 저장 (Ctrl+S)';
+    }
   }
 
   // ── 편집 모드 토글 버튼 ──────────────────────────────
@@ -61,7 +105,6 @@
     const slide = document.querySelector('.slide');
     if (!slide) return;
 
-    // 텍스트 노드가 있는 요소에 data-editable 추가
     const textTags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'li', 'span', 'div'];
     textTags.forEach(tag => {
       slide.querySelectorAll(tag).forEach(el => {
@@ -80,7 +123,7 @@
       el.addEventListener('blur', onBlurEditable);
       el.addEventListener('input', onInput);
     });
-    saveSnapshot(); // 현재 상태 스냅샷
+    saveSnapshot();
   }
 
   function disableEditing() {
@@ -105,7 +148,7 @@
   }
 
   function onInput() {
-    // 디바운스 스냅샷
+    markDirty();
     clearTimeout(onInput._timer);
     onInput._timer = setTimeout(saveSnapshot, 500);
   }
@@ -127,6 +170,7 @@
     redoStack.push(current);
     const prev = history[history.length - 1];
     restoreSnapshot(prev);
+    markDirty();
     showToast('실행 취소');
   }
 
@@ -135,6 +179,7 @@
     const next = redoStack.pop();
     history.push(next);
     restoreSnapshot(next);
+    markDirty();
     showToast('다시 실행');
   }
 
@@ -157,6 +202,13 @@
       <!-- 편집 모드 표시 -->
       <div class="toolbar-section">
         <span style="font-size:11px;font-weight:700;color:#2563eb;white-space:nowrap;letter-spacing:-0.01em;">✏️ 편집 중</span>
+      </div>
+
+      <div class="toolbar-divider"></div>
+
+      <!-- 저장 -->
+      <div class="toolbar-section">
+        <button class="tb-btn tb-btn-save" id="tb-save" title="변경사항 저장 (Ctrl+S)">💾 저장</button>
       </div>
 
       <div class="toolbar-divider"></div>
@@ -203,21 +255,14 @@
 
       <div class="toolbar-divider"></div>
 
-      <!-- 애니메이션 -->
-      <div class="toolbar-section">
-        <span class="toolbar-label">애니</span>
-        <button class="tb-btn" id="tb-anim-toggle" title="애니메이션 선택">✨ 애니메이션 ▾</button>
-      </div>
-
-      <div class="toolbar-divider"></div>
-
       <!-- 시스템 -->
       <div class="toolbar-section">
         <span class="toolbar-label">시스템</span>
-        <button class="tb-btn" id="tb-undo"   title="실행 취소 (Ctrl+Z)">↩ 취소</button>
-        <button class="tb-btn" id="tb-redo"   title="다시 실행 (Ctrl+Y)">↪ 다시</button>
-        <button class="tb-btn" id="tb-export" title="HTML 저장">⬇ HTML</button>
-        <button class="tb-btn" id="tb-pdf"    title="PDF 저장 (Ctrl+P)">📄 PDF</button>
+        <button class="tb-btn" id="tb-undo"        title="실행 취소 (Ctrl+Z)">↩ 취소</button>
+        <button class="tb-btn" id="tb-redo"        title="다시 실행 (Ctrl+Y)">↪ 다시</button>
+        <button class="tb-btn" id="tb-reset"       title="저장된 내용 초기화" style="color:#ef4444;">✕ 초기화</button>
+        <button class="tb-btn" id="tb-export"      title="HTML 파일로 저장">⬇ HTML</button>
+        <button class="tb-btn" id="tb-pdf"         title="PDF 저장 (Ctrl+P)">📄 PDF</button>
       </div>
 
       <!-- 닫기 -->
@@ -229,6 +274,9 @@
   }
 
   function attachToolbarEvents() {
+    // 저장
+    document.getElementById('tb-save')  ?.addEventListener('click', saveToStorage);
+
     // 서식
     document.getElementById('tb-bold')  ?.addEventListener('click', () => execCmd('bold'));
     document.getElementById('tb-italic')?.addEventListener('click', () => execCmd('italic'));
@@ -256,12 +304,12 @@
     document.getElementById('tb-align-right') ?.addEventListener('click', () => execCmd('justifyRight'));
 
     // 시스템
-    document.getElementById('tb-undo')       ?.addEventListener('click', undo);
-    document.getElementById('tb-redo')       ?.addEventListener('click', redo);
-    document.getElementById('tb-export')     ?.addEventListener('click', exportHTML);
-    document.getElementById('tb-pdf')        ?.addEventListener('click', exportPDF);
-    document.getElementById('tb-close')      ?.addEventListener('click', toggleEditor);
-    document.getElementById('tb-anim-toggle')?.addEventListener('click', toggleAnimPanel);
+    document.getElementById('tb-undo')  ?.addEventListener('click', undo);
+    document.getElementById('tb-redo')  ?.addEventListener('click', redo);
+    document.getElementById('tb-reset') ?.addEventListener('click', resetStorage);
+    document.getElementById('tb-export')?.addEventListener('click', exportHTML);
+    document.getElementById('tb-pdf')   ?.addEventListener('click', exportPDF);
+    document.getElementById('tb-close') ?.addEventListener('click', toggleEditor);
   }
 
   function execCmd(cmd, value) {
@@ -274,12 +322,14 @@
     const current = parseInt(window.getComputedStyle(currentTarget).fontSize, 10) || 20;
     currentTarget.style.fontSize = (current + delta) + 'px';
     document.getElementById('tb-font-size').value = current + delta;
+    markDirty();
     saveSnapshot();
   }
 
   function setFontSize(px) {
     if (!currentTarget || isNaN(px)) return;
     currentTarget.style.fontSize = px + 'px';
+    markDirty();
     saveSnapshot();
   }
 
@@ -295,95 +345,15 @@
     if (sizeEl) sizeEl.value = '';
   }
 
-  // ── 애니메이션 패널 ──────────────────────────────────
-  const ANIMS = [
-    { key: 'fade-in',    icon: '✨', label: 'Fade In' },
-    { key: 'slide-left', icon: '→', label: 'Slide Left' },
-    { key: 'slide-up',   icon: '↑', label: 'Slide Up' },
-    { key: 'zoom-up',    icon: '⊕', label: 'Zoom Up' },
-    { key: 'bounce',     icon: '⚡', label: 'Bounce' },
-    { key: 'flip',       icon: '🔄', label: 'Flip' },
-    { key: 'blur-in',    icon: '◎', label: 'Blur In' },
-  ];
-
-  function buildAnimPanel() {
-    const panel = document.createElement('div');
-    panel.id = 'anim-panel';
-    panel.innerHTML = '<div class="anim-title">애니메이션 선택</div>';
-
-    ANIMS.forEach(({ key, icon, label }) => {
-      const btn = document.createElement('button');
-      btn.className = 'anim-btn';
-      btn.innerHTML = `<span class="anim-icon">${icon}</span>${label}`;
-      btn.addEventListener('click', () => { applyAnim(key); closeAnimPanel(); });
-      panel.appendChild(btn);
-    });
-
-    // 제거 버튼
-    const removeBtn = document.createElement('button');
-    removeBtn.className = 'anim-btn';
-    removeBtn.innerHTML = `<span class="anim-icon">✕</span>제거`;
-    removeBtn.style.color = '#ef4444';
-    removeBtn.addEventListener('click', () => { removeAnim(); closeAnimPanel(); });
-    panel.appendChild(removeBtn);
-
-    document.body.appendChild(panel);
-
-    // 외부 클릭 시 닫기
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('#anim-panel') && !e.target.closest('#tb-anim-toggle')) {
-        closeAnimPanel();
-      }
-    });
-  }
-
-  function toggleAnimPanel() {
-    const panel = document.getElementById('anim-panel');
-    if (!panel) return;
-    const btn = document.getElementById('tb-anim-toggle');
-    if (panel.classList.contains('open')) {
-      closeAnimPanel();
-    } else {
-      // 버튼 위치에 맞춰 드롭다운 위치 지정
-      const rect = btn.getBoundingClientRect();
-      panel.style.left = rect.left + 'px';
-      panel.classList.add('open');
-      btn.classList.add('active');
-    }
-  }
-
-  function closeAnimPanel() {
-    const panel = document.getElementById('anim-panel');
-    const btn = document.getElementById('tb-anim-toggle');
-    panel?.classList.remove('open');
-    btn?.classList.remove('active');
-  }
-
-  function applyAnim(key) {
-    if (!currentTarget) { showToast('텍스트를 먼저 클릭하세요'); return; }
-    currentTarget.setAttribute('data-anim', key);
-    // 애니메이션 재실행을 위해 잠깐 제거 후 재적용
-    currentTarget.style.animation = 'none';
-    requestAnimationFrame(() => {
-      currentTarget.style.animation = '';
-    });
-    showToast(`${key} 적용됨`);
-    saveSnapshot();
-  }
-
-  function removeAnim() {
-    if (!currentTarget) return;
-    currentTarget.removeAttribute('data-anim');
-    currentTarget.style.animation = '';
-    showToast('애니메이션 제거됨');
-    saveSnapshot();
+  // ── localStorage 초기화 ──────────────────────────────
+  function resetStorage() {
+    if (!confirm('저장된 편집 내용을 모두 삭제하고 원본으로 되돌릴까요?\n(이 작업은 되돌릴 수 없습니다)')) return;
+    localStorage.removeItem(STORAGE_KEY);
+    location.reload();
   }
 
   // ── HTML 내보내기 ─────────────────────────────────────
   function exportHTML() {
-    const slide = document.querySelector('.slide');
-    if (!slide) return;
-
     const html = document.documentElement.outerHTML;
     const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
     const url = URL.createObjectURL(blob);
@@ -396,19 +366,40 @@
   }
 
   // ── PDF 내보내기 ──────────────────────────────────────
+  // 주요 원인: data-anim 요소들이 animation-fill-mode:both 로 opacity:0 에서 시작.
+  // 인쇄 시점에 animation이 실행 중이거나 아직 시작 전이면 내용이 투명하게 찍힘.
+  // → 인쇄 전 [data-anim] 에 강제로 animation:none + opacity:1 클래스 추가 후 복원.
   function exportPDF() {
-    // 편집 모드 잠깐 끄고 인쇄 (UI 요소 숨김)
+    // 1. 편집 모드 일시 비활성 (UI 요소 숨김)
     const wasActive = isEditorActive;
     if (wasActive) {
       document.body.classList.remove('editor-active');
+      document.querySelectorAll('[contenteditable]').forEach(el => {
+        el.contentEditable = 'false';
+      });
     }
-    showToast('인쇄 대화상자에서 PDF로 저장 선택 → 가로 방향 권장');
-    setTimeout(() => {
-      window.print();
-      if (wasActive) {
-        document.body.classList.add('editor-active');
-      }
-    }, 400);
+
+    // 2. 애니메이션 일시 비활성 (opacity:0 상태로 인쇄되는 현상 방지)
+    const animEls = document.querySelectorAll('[data-anim]');
+    animEls.forEach(el => el.classList.add('print-ready'));
+
+    showToast('인쇄 대화상자에서 PDF로 저장하세요 (가로 방향 권장)');
+
+    // 3. 레이아웃 안정화 후 인쇄
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        window.print();
+
+        // 4. 인쇄 후 복원
+        animEls.forEach(el => el.classList.remove('print-ready'));
+        if (wasActive) {
+          document.body.classList.add('editor-active');
+          document.querySelectorAll('[data-editable]').forEach(el => {
+            el.contentEditable = 'true';
+          });
+        }
+      }, 300);
+    });
   }
 
   // ── 토스트 알림 ──────────────────────────────────────
@@ -430,7 +421,7 @@
   // ── 키보드 단축키 ─────────────────────────────────────
   function attachKeyboard() {
     document.addEventListener('keydown', (e) => {
-      // E 키 — 편집 모드 토글 (텍스트 편집 중이 아닐 때만)
+      // E 키 — 편집 모드 토글
       if (e.key === 'e' || e.key === 'E') {
         if (!e.ctrlKey && !e.metaKey && document.activeElement.tagName !== 'INPUT') {
           if (!isEditorActive || document.activeElement.contentEditable !== 'true') {
@@ -442,6 +433,12 @@
       }
 
       if (!isEditorActive) return;
+
+      // Ctrl+S — 저장
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        saveToStorage();
+      }
 
       // Ctrl+Z — 실행 취소
       if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {

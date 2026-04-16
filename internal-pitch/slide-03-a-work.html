@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>A 작업 — 우리의 일</title>
+  <link rel="stylesheet" href="../core/theme.css">
+  <link rel="stylesheet" href="../core/slide-base.css">
+  <link rel="stylesheet" href="../core/editor.css">
+  <style>
+    .dept-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-sm);
+    }
+    .dept-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .dept-name {
+      font-size: var(--font-size-small);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-accent);
+      letter-spacing: var(--letter-spacing-wide);
+      text-transform: uppercase;
+    }
+    .dept-tasks {
+      font-size: var(--font-size-small);
+      color: var(--color-text-muted);
+      line-height: var(--line-height-normal);
+    }
+  </style>
+</head>
+<body class="slide-body">
+
+  <div class="slide layout-content theme-warm">
+
+    <p class="slide-eyebrow">A 작업</p>
+    <h1 class="slide-title">각자 해야 하는 일</h1>
+    <div class="slide-title-bar"></div>
+
+    <div class="slide-body-content">
+
+      <div class="dept-grid">
+
+        <div class="dept-card" data-anim="fade-in" data-delay="2">
+          <div class="dept-name">사업 기획 / 제품개발 / 경영</div>
+          <div class="dept-tasks">신규 사업 기획, 제품 로드맵 수립, 의사결정 및 경영 전반</div>
+        </div>
+
+        <div class="dept-card" data-anim="fade-in" data-delay="2">
+          <div class="dept-name">물류 운영</div>
+          <div class="dept-tasks">입출고 처리, 재고 관리, 배송 운영 및 현장 대응</div>
+        </div>
+
+        <div class="dept-card" data-anim="fade-in" data-delay="3">
+          <div class="dept-name">마케팅 기획 / 운영 / 성과관리</div>
+          <div class="dept-tasks">캠페인 기획 및 실행, 채널 운영, 성과 추적 및 보고</div>
+        </div>
+
+        <div class="dept-card" data-anim="fade-in" data-delay="3">
+          <div class="dept-name">경영지원 / 행정</div>
+          <div class="dept-tasks">결재 처리, 자금 관리, 인사·법무·총무 행정 전반</div>
+        </div>
+
+        <div class="dept-card" data-anim="fade-in" data-delay="4">
+          <div class="dept-name">제품 판매 / 영업</div>
+          <div class="dept-tasks">고객 발굴, 제안 및 협상, 계약 관리, 사후 관계 유지</div>
+        </div>
+
+        <div class="dept-card" style="background: var(--color-accent-bg); border-color: var(--color-accent-light);" data-anim="fade-in" data-delay="4">
+          <div class="dept-name" style="color: var(--color-accent-dark);">이것이 우리의 본업</div>
+          <div class="dept-tasks" style="color: var(--color-text);">각 팀이 제 역할을 다할 때 000가 굴러간다</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script src="../core/nav.js"></script>
+  <script src="../core/editor.js"></script>
+</body>
+</html>

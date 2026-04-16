@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>A 작업 현실 점검</title>
+  <link rel="stylesheet" href="../core/theme.css">
+  <link rel="stylesheet" href="../core/slide-base.css">
+  <link rel="stylesheet" href="../core/editor.css">
+  <style>
+    .two-col-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-xl);
+      flex: 1;
+      align-items: center;
+    }
+    .score-area {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .score-number {
+      font-size: 120px;
+      font-weight: var(--font-weight-black);
+      color: var(--color-accent);
+      line-height: 1;
+      letter-spacing: var(--letter-spacing-tight);
+    }
+    .score-label {
+      font-size: var(--font-size-h4);
+      color: var(--color-text-muted);
+      font-weight: var(--font-weight-regular);
+    }
+    .chaos-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .chaos-item {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 10px var(--space-md);
+      font-size: var(--font-size-small);
+      color: var(--color-text-muted);
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .chaos-item::before {
+      content: '↳';
+      color: var(--color-accent);
+      font-weight: var(--font-weight-bold);
+      flex-shrink: 0;
+    }
+    .chaos-section-label {
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
+      letter-spacing: var(--letter-spacing-wide);
+      text-transform: uppercase;
+      color: var(--color-text-light);
+      margin-bottom: var(--space-xs);
+    }
+  </style>
+</head>
+<body class="slide-body">
+
+  <div class="slide layout-content theme-warm">
+
+    <p class="slide-eyebrow">A 작업 점검</p>
+    <h1 class="slide-title">000는 A 작업을 잘 하고 있을까?</h1>
+    <div class="slide-title-bar"></div>
+
+    <div class="slide-body-content">
+      <div class="two-col-layout">
+
+        <div class="score-area" data-anim="slide-up" data-delay="2">
+          <div class="score-number">?</div>
+          <div class="score-label">10점 만점에 몇 점일까</div>
+          <div class="callout" style="margin-top: var(--space-sm);">
+            A 작업 사이에 끼어드는 일들이 많을수록 점수는 낮아진다
+          </div>
+        </div>
+
+        <div data-anim="fade-in" data-delay="3">
+          <div class="chaos-section-label">A 작업이 아닌 일들의 예</div>
+          <div class="chaos-list">
+            <div class="chaos-item">사무실 이전 / 짐 나르기</div>
+            <div class="chaos-item">마켓 000 대응</div>
+            <div class="chaos-item">000 인쇄물 감리</div>
+            <div class="chaos-item">000 샘플 패키징</div>
+            <div class="chaos-item">000 샘플 배송</div>
+            <div class="chaos-item">000 부자재 적치</div>
+            <div class="chaos-item">아마존 해외 수출 대응</div>
+            <div class="chaos-item">000 런칭 잡무</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script src="../core/nav.js"></script>
+  <script src="../core/editor.js"></script>
+</body>
+</html>

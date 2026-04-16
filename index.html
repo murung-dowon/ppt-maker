@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PPT Maker — 발표자료 모음</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #0f1117;
+      --surface:      #1a1d27;
+      --surface-2:    #22263a;
+      --border:       #2e3347;
+      --text:         #e8eaf0;
+      --text-muted:   #8b90a8;
+      --text-light:   #565c7a;
+      --accent:       #2563eb;
+      --accent-light: #3b82f6;
+      --accent-bg:    #1e3a6e22;
+      --font: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* ── Header ── */
+    header {
+      padding: 40px 48px 32px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo {
+      width: 36px;
+      height: 36px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .header-text h1 {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .header-text p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* ── Main layout ── */
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 48px 48px 80px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--text-light);
+      margin-bottom: 20px;
+    }
+
+    /* ── Project cards ── */
+    .projects-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color 0.15s;
+    }
+
+    .project-card:hover {
+      border-color: #3e4461;
+    }
+
+    .project-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 24px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .project-header:hover .project-name {
+      color: var(--accent-light);
+    }
+
+    .project-index {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-light);
+      width: 24px;
+      flex-shrink: 0;
+      text-align: center;
+    }
+
+    .project-info { flex: 1; min-width: 0; }
+
+    .project-name {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.2px;
+      transition: color 0.15s;
+    }
+
+    .project-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .project-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 9px;
+      border-radius: 20px;
+      background: var(--surface-2);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    .badge.has-presentation {
+      background: var(--accent-bg);
+      color: var(--accent-light);
+      border-color: var(--accent)44;
+    }
+
+    .toggle-icon {
+      width: 20px;
+      height: 20px;
+      color: var(--text-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      transition: transform 0.2s;
+    }
+
+    .project-card.open .toggle-icon {
+      transform: rotate(180deg);
+    }
+
+    /* ── Slide list ── */
+    .slide-list {
+      display: none;
+      border-top: 1px solid var(--border);
+      padding: 12px 0;
+    }
+
+    .project-card.open .slide-list {
+      display: block;
+    }
+
+    .slide-list-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 24px 8px 64px;
+    }
+
+    .presentation-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      background: var(--accent);
+      color: #fff;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+
+    .presentation-link:hover {
+      background: var(--accent-light);
+    }
+
+    .presentation-link svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .slides-divider {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-light);
+      padding: 12px 24px 6px 64px;
+      letter-spacing: 0.5px;
+    }
+
+    .slide-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 9px 24px 9px 64px;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.1s;
+    }
+
+    .slide-item:hover {
+      background: var(--surface-2);
+    }
+
+    .slide-num {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-light);
+      width: 20px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .slide-title {
+      font-size: 14px;
+      color: var(--text-muted);
+      flex: 1;
+    }
+
+    .slide-item:hover .slide-title {
+      color: var(--text);
+    }
+
+    .slide-filename {
+      font-size: 11px;
+      color: var(--text-light);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    .slide-arrow {
+      font-size: 12px;
+      color: var(--text-light);
+      opacity: 0;
+      transition: opacity 0.1s;
+    }
+
+    .slide-item:hover .slide-arrow {
+      opacity: 1;
+    }
+
+    /* ── Loading skeleton ── */
+    .skeleton {
+      height: 36px;
+      background: var(--surface-2);
+      border-radius: 6px;
+      margin: 6px 24px 6px 64px;
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 0.3; }
+    }
+
+    /* ── Empty state ── */
+    .empty {
+      padding: 16px 24px 16px 64px;
+      font-size: 13px;
+      color: var(--text-light);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">P</div>
+  <div class="header-text">
+    <h1>PPT Maker</h1>
+    <p>발표자료 모음 — 프로젝트를 선택해 슬라이드를 열람하세요</p>
+  </div>
+</header>
+
+<main>
+  <p class="section-label">발표 프로젝트</p>
+  <div class="projects-grid" id="projectsGrid">
+    <!-- JS로 렌더 -->
+  </div>
+</main>
+
+<script>
+  const VIEWER = 'viewer.html';
+
+  async function loadSlides(projectId) {
+    try {
+      const res = await fetch(`${projectId}/slides.json`);
+      const data = await res.json();
+      // slides.json 포맷 두 가지 대응: Array 또는 { slides: [] }
+      if (Array.isArray(data)) return data;
+      if (data.slides) {
+        return data.slides.map(f =>
+          typeof f === 'string' ? { file: f, title: f.replace(/\.html$/, '').replace(/^slide-\d+-?/, '') } : f
+        );
+      }
+      return [];
+    } catch {
+      return null; // fetch 실패
+    }
+  }
+
+  function viewerUrl(project, file) {
+    return `${VIEWER}?project=${encodeURIComponent(project)}&file=${encodeURIComponent(file)}`;
+  }
+
+  async function renderProject(project, idx, container) {
+    const card = document.createElement('div');
+    card.className = 'project-card';
+    card.innerHTML = `
+      <div class="project-header" role="button" tabindex="0">
+        <span class="project-index">${String(idx + 1).padStart(2, '0')}</span>
+        <div class="project-info">
+          <div class="project-name">${project.name}</div>
+          <div class="project-desc">${project.description}</div>
+        </div>
+        <div class="project-meta">
+          ${project.hasPresentation ? '<span class="badge has-presentation">발표용 빌드</span>' : ''}
+          <span class="badge slide-count-badge">로딩 중…</span>
+        </div>
+        <div class="toggle-icon">▼</div>
+      </div>
+      <div class="slide-list" id="list-${project.id}">
+        <div class="skeleton"></div>
+        <div class="skeleton" style="width:70%"></div>
+      </div>
+    `;
+    container.appendChild(card);
+
+    const header = card.querySelector('.project-header');
+    const slideList = card.querySelector('.slide-list');
+    const countBadge = card.querySelector('.slide-count-badge');
+
+    // 토글
+    header.addEventListener('click', () => {
+      card.classList.toggle('open');
+    });
+    header.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') card.classList.toggle('open');
+    });
+
+    // 슬라이드 로드
+    const slides = await loadSlides(project.id);
+
+    if (!slides) {
+      countBadge.textContent = '오류';
+      slideList.innerHTML = '<div class="empty">slides.json을 읽을 수 없습니다.</div>';
+      return;
+    }
+
+    countBadge.textContent = `${slides.length}장`;
+
+    let html = '';
+
+    // 발표용 빌드 링크
+    if (project.hasPresentation) {
+      html += `
+        <div class="slide-list-header">
+          <a class="presentation-link" href="${viewerUrl(project.id, 'dist/presentation.html')}">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8">
+              <polygon points="4,2 14,8 4,14" fill="currentColor" stroke="none"/>
+            </svg>
+            전체 발표 보기
+          </a>
+        </div>
+      `;
+    }
+
+    // 개별 슬라이드
+    if (slides.length > 0) {
+      html += `<div class="slides-divider">개별 슬라이드</div>`;
+      slides.forEach((slide, i) => {
+        const title = slide.title || slide.file;
+        html += `
+          <a class="slide-item" href="${viewerUrl(project.id, slide.file)}">
+            <span class="slide-num">${i + 1}</span>
+            <span class="slide-title">${title}</span>
+            <span class="slide-filename">${slide.file}</span>
+            <span class="slide-arrow">→</span>
+          </a>
+        `;
+      });
+    }
+
+    if (!html) {
+      html = '<div class="empty">슬라이드가 없습니다.</div>';
+    }
+
+    slideList.innerHTML = html;
+  }
+
+  async function init() {
+    const res = await fetch('/api/projects');
+    const projects = await res.json();
+    const grid = document.getElementById('projectsGrid');
+
+    for (let i = 0; i < projects.length; i++) {
+      await renderProject(projects[i], i, grid);
+    }
+  }
+
+  init();
+</script>
+</body>
+</html>

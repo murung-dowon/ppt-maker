@@ -1,7 +1,12 @@
-# ppt-maker
+# murung-ppt-maker
 
 Claude Code로 구동하는 HTML 기반 프레젠테이션 제작 시스템.
 PDF나 문서를 업로드하면 Claude Code가 내용을 파악해 슬라이드를 자동 생성하고, 최종 결과물을 Figma로 내보낼 수 있습니다.
+
+## 주요 기능
+- 🧠 PPT 자동 생성
+- ✏️ 온라인 편집 + PDF 추출
+- 🎨 Figma 변환 및 직접 수정
 
 ---
 

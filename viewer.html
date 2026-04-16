@@ -232,9 +232,11 @@
     // 경로 조합 — 상위 디렉토리 탈출 방지
     const safePath = `${project}/${file}`.replace(/\.\.\//g, '');
 
-    navProject.textContent = decodeURIComponent(project);
+    // PPTs/ 접두사 제거 후 표시
+    const displayProject = decodeURIComponent(project).replace(/^PPTs\//, '');
+    navProject.textContent = displayProject;
     navFile.textContent    = decodeURIComponent(file);
-    document.title         = `${decodeURIComponent(project)} — ${decodeURIComponent(file)}`;
+    document.title         = `${displayProject} — ${decodeURIComponent(file)}`;
 
     openNewBtn.href = safePath;
     frame.src       = safePath;
@@ -245,6 +247,13 @@
       frame.style.display = 'none';
     });
   }
+
+  // iframe 안의 슬라이드에서 PDF 버튼 클릭 시 전체 발표 PDF 출력
+  window.addEventListener('message', (e) => {
+    if (e.data && e.data.type === 'ppt-export-pdf' && project) {
+      window.open(`${project}/dist/presentation.html?autoprint=1`, '_blank');
+    }
+  });
 </script>
 </body>
 </html>

@@ -4,7 +4,7 @@
 
 // ─── SLIDE_DATA (Claude Code가 자동 업데이트하는 영역) ──────────────────────
 // [SLIDE_DATA_START]
-const SLIDE_DATA = {"project":"internal-pitch","slides":[{"index":0,"file":"slide-01-title.html","layout":"layout-title","theme":"theme-warm","elements":{"eyebrow":"내부 피칭","title":"우리는 어떻게 일하고 있는가","subtitle":"더글러스 엥겔바트의 A/B/C 작업 프레임워크로 000의 일하는 방식을 돌아봅니다","meta":"000 · 2026"}},{"index":1,"file":"slide-02-abc-overview.html","layout":"layout-content","theme":"theme-warm","elements":{"eyebrow":"더글러스 엥겔바트","title":"작업의 3단계","cardLayout":"rows","cards":[{"badge":"C","badgeStyle":"accent","accent":true,"eyebrow":"C 작업","title":"일하는 방식을 발전시키는 일","body":"우리가 자꾸 발전할 수 있는 체계를 만드는 일 — B 작업 자체를 더 잘할 수 있게 설계"},{"badge":"B","badgeStyle":"outline","eyebrow":"B 작업","title":"일하는 방식을 개선하는 일","body":"해야 하는 일을 더 잘할 수 있게 설계하는 일 — 자동화, 템플릿, 프로세스 재정비"},{"badge":"A","badgeStyle":"muted","eyebrow":"A 작업","title":"개인이 원래 해야 하는 일","body":"각자 해야 하는 일 알아서 잘 하기 — 사업 기획, 물류, 마케팅, 영업, 경영지원"}]}},{"index":2,"file":"slide-03-a-work.html","layout":"layout-content","theme":"theme-warm","elements":{"eyebrow":"A 작업","title":"각자 해야 하는 일","cards":[{"title":"사업 기획 / 제품개발 / 경영","body":"신규 사업 기획, 제품 로드맵 수립, 의사결정 및 경영 전반"},{"title":"물류 운영","body":"입출고 처리, 재고 관리, 배송 운영 및 현장 대응"},{"title":"마케팅 기획 / 운영 / 성과관리","body":"캠페인 기획 및 실행, 채널 운영, 성과 추적 및 보고"},{"title":"경영지원 / 행정","body":"결재 처리, 자금 관리, 인사·법무·총무 행정 전반"},{"title":"제품 판매 / 영업","body":"고객 발굴, 제안 및 협상, 계약 관리, 사후 관계 유지"},{"title":"이것이 우리의 본업","body":"각 팀이 제 역할을 다할 때 000가 굴러간다"}]}},{"index":3,"file":"slide-04-a-reality.html","layout":"layout-content","theme":"theme-warm","elements":{"eyebrow":"A 작업 점검","title":"000는 A 작업을 잘 하고 있을까?","stat":"?","statLabel":"10점 만점에 몇 점일까","callout":"A 작업 사이에 끼어드는 일들이 많을수록 점수는 낮아진다","items":["사무실 이전 / 짐 나르기","마켓 000 대응","000 인쇄물 감리","000 샘플 패키징","000 샘플 배송","000 부자재 적치","아마존 해외 수출 대응","000 런칭 잡무"]}},{"index":4,"file":"slide-05-insight.html","layout":"layout-quote","theme":"theme-warm","elements":{"quote":"중요한 건 잘잘못 구분이 아니라 '되게끔 하는 것'","source":"비난과 책임 추궁이 아닌, 시스템과 구조를 바꾸는 것이 목적입니다"}},{"index":5,"file":"slide-06-b-section.html","layout":"layout-section","theme":"theme-warm","elements":{"sectionLabel":"다음 단계","title":"B 작업","desc":"일하는 방식을 개선하는 일"}},{"index":6,"file":"slide-07-b-work.html","layout":"layout-content","theme":"theme-warm","elements":{"eyebrow":"B 작업","title":"해야 하는 일을 더 잘할 수 있게 설계하기","cards":[{"eyebrow":"물류","body":"입출고 및 전체 재고 현황 대시보드 구성"},{"eyebrow":"마케팅","body":"성과 현황 및 추이 대시보드 구성"},{"eyebrow":"경영지원","body":"결재 프로세스 재정비, 자금 현황 및 추이 대시보드 구성"},{"eyebrow":"영업","body":"영업 프로세스 재정비, 우선순위 정의 및 관리 체계 수립"}],"chips":["업무 티켓 시스템","일정 관리 / 공유","반복작업 자동화","업무 템플릿 제정","협업 도구 도입","회의 방식 개선","커뮤니케이션 규칙 제정","시스템 개발"]}},{"index":7,"file":"slide-08-c-section.html","layout":"layout-section","theme":"theme-warm","elements":{"sectionLabel":"최종 단계","title":"C 작업","desc":"일하는 방식을 발전시키는 일"}},{"index":8,"file":"slide-09-c-work.html","layout":"layout-content","theme":"theme-warm","elements":{"eyebrow":"C 작업","title":"우리가 자꾸 발전할 수 있는 체계","steps":[{"num":"01","title":"현황 파악","body":"각 팀의 A 작업 현황을 정기적으로 측정하고 기록한다","hasImage":true},{"num":"02","title":"병목 식별","body":"반복되는 문제와 비효율을 구조적으로 파악한다","hasImage":true},{"num":"03","title":"B 작업 설계","body":"개선 과제를 정의하고 우선순위를 세워 실행한다","hasImage":true},{"num":"04","title":"반복 개선","body":"결과를 검증하고 다음 사이클에 반영하는 루프를 만든다","hasImage":true}],"callout":"C 작업은 B 작업을 잘 하기 위한 B 작업이다 — 조직이 스스로 학습하는 구조"}},{"index":9,"file":"slide-10-closing.html","layout":"layout-closing","theme":"theme-warm","elements":{"title":"A를 잘 하려면 B와 C가 필요하다","subtitle":"지금 우리에게 필요한 건 더 열심히가 아니라, 더 잘 설계하는 것","chips":["A — 본업에 집중할 수 있는 환경","B — 일하는 방식의 지속적 개선","C — 스스로 학습하는 조직 구조"]}}]};
+const SLIDE_DATA = {"project":"engelbart-abc-work","slides":[{"index":0,"file":"slide-01-title.html","layout":"layout-title","theme":"","elements":{"eyebrow":"Douglas Engelbart Framework","title":"더글러스 엥겔바트의 작업 구분 3단계","subtitle":"A 작업 · B 작업 · C 작업 — 우리는 어디에 서 있는가"}},{"index":1,"file":"slide-02-overview.html","layout":"layout-content","theme":"","elements":{"eyebrow":"Douglas Engelbart","title":"작업은 3개 층위로 나뉜다","steps":[{"num":"A","title":"본업 수행","body":"각자 맡은 일을 알아서 잘 하는 것. 기획·개발·마케팅·영업·운영 등 실무 그 자체.","hasImage":true},{"num":"B","title":"방식 개선","body":"A 작업을 더 잘할 수 있도록 방식을 설계하는 일. 자동화·템플릿·협업 도구 도입.","hasImage":true},{"num":"C","title":"체계 구축","body":"B 작업을 지속적으로 할 수 있는 구조를 만드는 일. 조직이 스스로 발전하는 체계.","hasImage":true}],"callout":"대부분의 조직은 A에만 집중한다. B·C가 없으면 성장의 천장이 생긴다."}},{"index":2,"file":"slide-03-a-work.html","layout":"layout-content","theme":"","elements":{"eyebrow":"A 작업","title":"개인이 원래 해야 하는 일","cards":[{"eyebrow":"사업 기획 / 제품개발 / 경영","body":"회사가 나아갈 방향과 제품을 만드는 핵심 업무"},{"eyebrow":"물류 운영","body":"입출고, 재고 관리, 배송 등 물리적 운영"},{"eyebrow":"마케팅 기획 / 운영 / 성과관리","body":"브랜드 성장과 채널 운영, 수치 기반 성과 추적"},{"eyebrow":"경영지원 / 행정","body":"결재, 계약, 재무, 인사 등 내부 운영 지원"},{"eyebrow":"제품 판매 / 영업","body":"채널 입점, 거래처 관리, 매출 확대"},{"eyebrow":"사무실 이전 / 짐 나르기","body":"팀 전체가 움직여야 하는 일도 A 작업이다"}]}},{"index":3,"file":"slide-04-diagnosis.html","layout":"layout-content","theme":"","elements":{"eyebrow":"현재 진단","title":"우리는 A 작업을 잘 하고 있을까?","stat":"?","statLabel":"10점 만점에 몇 점?","callout":"중요한 건 잘잘못 구분이 아니라 '되게끔 하는 것'","items":["샘플 배송 지연","인쇄물 감리 누락","샘플 패키징 미완","부자재 적치 미비","런칭 일정 지연","마켓 대응 공백","아마존 수출 준비"]}},{"index":4,"file":"slide-05-b-work.html","layout":"layout-content","theme":"","elements":{"eyebrow":"B 작업","title":"일하는 방식을 개선하는 일","cards":[{"eyebrow":"물류","body":"입출고 및 전체 재고 현황 대시보드 구성"},{"eyebrow":"마케팅","body":"성과 현황 및 추이 대시보드 구성"},{"eyebrow":"경영지원","body":"결재 프로세스 재정비, 자금 현황 및 추이 대시보드"},{"eyebrow":"영업","body":"영업 프로세스 재정비, 우선순위 정의"}],"chips":["반복작업 자동화","업무 템플릿 제정","협업 도구 도입","회의 방식 개선"]}},{"index":5,"file":"slide-06-b-action.html","layout":"layout-content","theme":"","elements":{"eyebrow":"B 작업 실행 방안","title":"어떻게 실행할 것인가","cards":[{"eyebrow":"업무 티켓 시스템","body":"모든 업무를 가시화하고 우선순위를 명확히"},{"eyebrow":"업무 자동화","body":"반복 작업을 줄여 핵심 업무 집중 시간 확보"},{"eyebrow":"시스템 개발","body":"맞춤형 내부 도구로 운영 효율 극대화"},{"eyebrow":"일정 관리 / 공유","body":"팀 전체 일정을 투명하게 공유하고 조율"},{"eyebrow":"커뮤니케이션 규칙 제정","body":"채널별 목적과 응답 규칙을 정해 소통 비용 절감"}]}},{"index":6,"file":"slide-07-c-work.html","layout":"layout-content","theme":"","elements":{"eyebrow":"C 작업","title":"우리가 자꾸 발전할 수 있는 체계를 만드는 일","cards":[{"eyebrow":"A","title":"본업 수행","body":"본업을 잘 수행한다"},{"eyebrow":"B","title":"방식 개선","body":"방식을 지속 개선한다"},{"eyebrow":"C","title":"체계 구축","body":"개선 자체를 설계한다"},{"eyebrow":"회고 문화 정착","body":"매 분기 B 작업 성과를 점검하고 다음 개선 과제를 정의"},{"eyebrow":"지식 체계화","body":"노하우·의사결정 맥락을 문서화해 조직 자산으로 축적"}],"chips":["A·B·C 세 층위가 함께 돌아갈 때 — 조직은 스스로 성장한다"]}}]};
 // [SLIDE_DATA_END]
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -119,10 +119,10 @@ function placeholder(p, x, y, w, h, label='Image') {
 function drawChips(f, chips, startX, y, C, fn) {
   let cx = startX;
   (chips || []).forEach(chip => {
-    const cw = chip.length * 8 + 32;
-    rct(f, cx, y, cw, 28, C.surface, 1, 14, C.border, 0.8);
-    txt(f, cx+12, y+6, cw-24, chip, 11, fn.med, C.text, 1, 100, 0);
-    cx += cw + 8;
+    const cw = chip.length * 10 + 40;
+    rct(f, cx, y, cw, 36, C.surface, 1, 18, C.border, 0.8);
+    txt(f, cx+14, y+9, cw-28, chip, 13, fn.med, C.text, 1, 100, 0);
+    cx += cw + 10;
   });
 }
 
@@ -215,10 +215,10 @@ function renderContent(f, el, C, fn) {
         ty += (nt ? nt.height : 36) + 6;
       }
       if (step.title) {
-        const tt = txt(f, sx+16, ty, stepW-32, step.title, 15, fn.bold, C.text, 1, 130, -1);
-        ty += (tt ? tt.height : 22) + 6;
+        const tt = txt(f, sx+16, ty, stepW-32, step.title, 20, fn.bold, C.text, 1, 130, -1);
+        ty += (tt ? tt.height : 28) + 6;
       }
-      if (step.body) txt(f, sx+16, ty, stepW-32, step.body, 12, fn.reg, C.muted, 1, 150, 0);
+      if (step.body) txt(f, sx+16, ty, stepW-32, step.body, 16, fn.reg, C.muted, 1, 150, 0);
 
       // 화살표
       if (i < n-1) {
@@ -230,9 +230,9 @@ function renderContent(f, el, C, fn) {
 
     if (el.callout) {
       const cy = bodyY + stepsH + 12;
-      rct(f, PX, cy, W-2*PX, 48, C.accentBg, 1, 8, C.border, 0.5);
-      rct(f, PX, cy, 4, 48, C.accent, 1);
-      txt(f, PX+20, cy+13, W-2*PX-36, el.callout, 13, fn.semi, C.text, 1, 130, 0);
+      rct(f, PX, cy, W-2*PX, 56, C.accentBg, 1, 8, C.border, 0.5);
+      rct(f, PX, cy, 4, 56, C.accent, 1);
+      txt(f, PX+20, cy+16, W-2*PX-36, el.callout, 16, fn.semi, C.text, 1, 130, 0);
     }
     return;
   }
@@ -251,9 +251,9 @@ function renderContent(f, el, C, fn) {
     }
     if (el.callout) {
       ly += 16;
-      rct(f, PX, ly, colW, 56, C.accentBg, 1, 8, C.border, 0.5);
-      rct(f, PX, ly, 4, 56, C.accent, 1);
-      txt(f, PX+16, ly+12, colW-24, el.callout, 13, fn.semi, C.text, 1, 135, 0);
+      rct(f, PX, ly, colW, 64, C.accentBg, 1, 8, C.border, 0.5);
+      rct(f, PX, ly, 4, 64, C.accent, 1);
+      txt(f, PX+16, ly+14, colW-24, el.callout, 16, fn.semi, C.text, 1, 135, 0);
     }
 
     // 오른쪽: 항목 리스트
@@ -261,9 +261,9 @@ function renderContent(f, el, C, fn) {
       let iy = y;
       el.items.forEach(item => {
         const iw = W - 2*PX - colW - 48;
-        rct(f, rx, iy, iw, 40, C.surface, 1, 8, C.border, 0.6);
-        txt(f, rx+14, iy+11, iw-28, item, 13, fn.reg, C.muted, 1, 120, 0);
-        iy += 48;
+        rct(f, rx, iy, iw, 48, C.surface, 1, 8, C.border, 0.6);
+        txt(f, rx+16, iy+14, iw-32, item, 16, fn.reg, C.muted, 1, 120, 0);
+        iy += 56;
       });
     }
     return;
@@ -314,7 +314,7 @@ function renderContent(f, el, C, fn) {
 
   // ── CARDS GRID (+ 하단 chips) ─────────────────────────────────────────────
   if (el.cards && el.cards.length) {
-    const chipsH    = (el.chips && el.chips.length) ? 44 : 0;
+    const chipsH    = (el.chips && el.chips.length) ? 52 : 0;
     const cardsAreaH = bodyH - chipsH - (chipsH ? 12 : 0);
 
     const n      = el.cards.length;
@@ -332,16 +332,16 @@ function renderContent(f, el, C, fn) {
       const cy  = bodyY + row*(ch+g);
 
       rct(f, cx, cy, cw, ch, C.surface, 1, 12, C.border, 0.8);
-      let ty = cy + 20;
+      let ty = cy + 24;
       if (c.eyebrow) {
-        txt(f, cx+20, ty, cw-40, c.eyebrow, 10, fn.semi, C.accent, 1, 100, 18);
-        ty += 20;
+        txt(f, cx+24, ty, cw-48, c.eyebrow, 13, fn.semi, C.accent, 1, 100, 18);
+        ty += 22;
       }
       if (c.title) {
-        const tt = txt(f, cx+20, ty, cw-40, c.title, 14, fn.bold, C.text, 1, 130, -1);
-        ty += (tt ? tt.height : 22) + 6;
+        const tt = txt(f, cx+24, ty, cw-48, c.title, 18, fn.bold, C.text, 1, 130, -1);
+        ty += (tt ? tt.height : 26) + 6;
       }
-      if (c.body) txt(f, cx+20, ty, cw-40, c.body, 12, fn.reg, C.muted, 1, 150, 0);
+      if (c.body) txt(f, cx+24, ty, cw-48, c.body, 15, fn.reg, C.muted, 1, 150, 0);
     });
 
     // chips 띠
@@ -364,9 +364,9 @@ function renderContent(f, el, C, fn) {
 
   // ── CALLOUT ONLY ──────────────────────────────────────────────────────────
   if (el.callout) {
-    rct(f, PX, y, W-2*PX, 64, C.accentBg, 1, 8, C.border, 0.5);
-    rct(f, PX, y, 4, 64, C.accent, 1);
-    txt(f, PX+20, y+20, W-2*PX-32, el.callout, 18, fn.semi, C.text, 1, 140, 0);
+    rct(f, PX, y, W-2*PX, 72, C.accentBg, 1, 8, C.border, 0.5);
+    rct(f, PX, y, 4, 72, C.accent, 1);
+    txt(f, PX+20, y+22, W-2*PX-32, el.callout, 20, fn.semi, C.text, 1, 140, 0);
     return;
   }
 
@@ -405,9 +405,9 @@ function renderTwoCol(f, el, C, fn) {
     const ch = Math.min((bodyH-(ct[1]?28:0)) / el.cards.length - 12, 120);
     el.cards.slice(0,4).forEach(c => {
       rct(f, rx, cy, cw, ch, C.surface, 1, 10, C.border, 0.8);
-      let ty = cy + 16;
-      if (c.title) { txt(f, rx+16, ty, cw-32, c.title, 14, fn.semi, C.text,  1, 130, -1); ty += 26; }
-      if (c.body)  { txt(f, rx+16, ty, cw-32, c.body,  12, fn.reg,  C.muted, 1, 150,  0); }
+      let ty = cy + 18;
+      if (c.title) { txt(f, rx+18, ty, cw-36, c.title, 17, fn.semi, C.text,  1, 130, -1); ty += 28; }
+      if (c.body)  { txt(f, rx+18, ty, cw-36, c.body,  14, fn.reg,  C.muted, 1, 150,  0); }
       cy += ch + 12;
     });
   } else {

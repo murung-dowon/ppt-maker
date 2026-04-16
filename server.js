@@ -30,8 +30,7 @@ const MIME = {
   '.woff2':'font/woff2',
 };
 
-// 프로젝트로 인식하지 않을 폴더
-const SKIP = new Set(['core', 'figma-plugin', 'node_modules', 'dist', '.git', '.claude']);
+const PPTS_DIR = path.join(ROOT, 'PPTs');
 
 function scanProjects() {
   // projects.json — 선택적 메타데이터 오버라이드
@@ -43,25 +42,28 @@ function scanProjects() {
 
   const projects = [];
 
-  for (const entry of fs.readdirSync(ROOT, { withFileTypes: true })) {
-    if (!entry.isDirectory()) continue;
-    if (SKIP.has(entry.name) || entry.name.startsWith('.')) continue;
+  // PPTs/ 하위 폴더만 스캔
+  const scanDir = fs.existsSync(PPTS_DIR) ? PPTS_DIR : ROOT;
 
-    const slidesPath = path.join(ROOT, entry.name, 'slides.json');
+  for (const entry of fs.readdirSync(scanDir, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue;
+    if (entry.name.startsWith('.')) continue;
+
+    const slidesPath = path.join(scanDir, entry.name, 'slides.json');
     if (!fs.existsSync(slidesPath)) continue;
 
     let slides = [];
     try { slides = JSON.parse(fs.readFileSync(slidesPath, 'utf-8')); } catch {}
 
     const hasPresentation = fs.existsSync(
-      path.join(ROOT, entry.name, 'dist', 'presentation.html')
+      path.join(scanDir, entry.name, 'dist', 'presentation.html')
     );
 
     const meta = metaMap[entry.name] || {};
 
     projects.push({
       id:              entry.name,
-      name:            entry.name,
+      name:            meta.name || entry.name,
       description:     meta.description || '',
       hasPresentation,
       slideCount:      slides.length,

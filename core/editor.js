@@ -366,11 +366,11 @@
   }
 
   // ── PDF 내보내기 ──────────────────────────────────────
-  // 주요 원인: data-anim 요소들이 animation-fill-mode:both 로 opacity:0 에서 시작.
-  // 인쇄 시점에 animation이 실행 중이거나 아직 시작 전이면 내용이 투명하게 찍힘.
-  // → 인쇄 전 [data-anim] 에 강제로 animation:none + opacity:1 클래스 추가 후 복원.
+  // presentation.html(전체 슬라이드)과 개별 슬라이드 파일 모두 지원.
+  // 주의: presentation.html에서는 JS가 .slide-wrapper를 display:none + scale transform으로
+  // 관리하므로, 인쇄 전 명시적으로 모든 래퍼를 펼치고 transform을 제거해야 전체 페이지 출력됨.
   function exportPDF() {
-    // 1. 편집 모드 일시 비활성 (UI 요소 숨김)
+    // 1. 편집 모드 일시 비활성
     const wasActive = isEditorActive;
     if (wasActive) {
       document.body.classList.remove('editor-active');
@@ -379,19 +379,88 @@
       });
     }
 
-    // 2. 애니메이션 일시 비활성 (opacity:0 상태로 인쇄되는 현상 방지)
+    // 2. 애니메이션 비활성 (opacity:0 인쇄 방지)
     const animEls = document.querySelectorAll('[data-anim]');
     animEls.forEach(el => el.classList.add('print-ready'));
 
-    showToast('인쇄 대화상자에서 PDF로 저장하세요 (가로 방향 권장)');
+    // 3. 멀티슬라이드 대응: slide-wrapper 전체 펼치기 + transform 제거
+    const wrappers = document.querySelectorAll('.slide-wrapper');
+    const allSlides = document.querySelectorAll('.slide');
+    const savedTransforms = [];
 
-    // 3. 레이아웃 안정화 후 인쇄
+    wrappers.forEach(w => {
+      w.style.display = 'block';
+      w.style.position = 'relative';
+      w.style.width = '1280px';
+      w.style.height = '720px';
+      w.style.pageBreakAfter = 'always';
+      w.style.breakAfter = 'page';
+    });
+
+    allSlides.forEach(s => {
+      savedTransforms.push(s.style.transform);
+      s.style.transform = 'none';
+      s.style.width = '1280px';
+      s.style.height = '720px';
+      s.style.boxShadow = 'none';
+    });
+
+    document.body.style.overflow = 'visible';
+    document.documentElement.style.overflow = 'visible';
+
+    showToast('인쇄 대화상자 → "PDF로 저장" 선택 (용지: 가로 1280×720)');
+
+    // 4. iframe 안이면 viewer에 위임 (전체 PDF 출력)
+    if (window.parent !== window) {
+      // 복원
+      animEls.forEach(el => el.classList.remove('print-ready'));
+      wrappers.forEach(w => {
+        w.style.display = ''; w.style.position = '';
+        w.style.width = ''; w.style.height = '';
+        w.style.pageBreakAfter = ''; w.style.breakAfter = '';
+      });
+      allSlides.forEach((s, i) => {
+        s.style.transform = savedTransforms[i] || '';
+        s.style.width = ''; s.style.height = ''; s.style.boxShadow = '';
+      });
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+      if (wasActive) document.body.classList.add('editor-active');
+      window.parent.postMessage({ type: 'ppt-export-pdf' }, '*');
+      showToast('전체 PDF 내보내기 중...');
+      return;
+    }
+
+    // 5. 레이아웃 안정화 후 인쇄
     requestAnimationFrame(() => {
       setTimeout(() => {
         window.print();
 
-        // 4. 인쇄 후 복원
+        // 5. 인쇄 후 복원
         animEls.forEach(el => el.classList.remove('print-ready'));
+
+        wrappers.forEach(w => {
+          w.style.display = '';
+          w.style.position = '';
+          w.style.width = '';
+          w.style.height = '';
+          w.style.pageBreakAfter = '';
+          w.style.breakAfter = '';
+        });
+
+        allSlides.forEach((s, i) => {
+          s.style.transform = savedTransforms[i] || '';
+          s.style.width = '';
+          s.style.height = '';
+          s.style.boxShadow = '';
+        });
+
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
+
+        // scale 재계산
+        window.dispatchEvent(new Event('resize'));
+
         if (wasActive) {
           document.body.classList.add('editor-active');
           document.querySelectorAll('[data-editable]').forEach(el => {
@@ -417,6 +486,9 @@
     clearTimeout(showToast._timer);
     showToast._timer = setTimeout(() => toast.classList.remove('show'), 1800);
   }
+
+  // ── 전역 노출 (build.js autoprint에서 호출) ───────────
+  window._pptExportPDF = exportPDF;
 
   // ── 키보드 단축키 ─────────────────────────────────────
   function attachKeyboard() {

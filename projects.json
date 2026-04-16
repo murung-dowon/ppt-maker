@@ -34,5 +34,11 @@
     "name": "내부 피칭",
     "description": "더글러스 엥겔바트의 A/B/C 작업 프레임워크 — 일하는 방식 개선 제안",
     "hasPresentation": true
+  },
+  {
+    "id": "engelbart-abc-work",
+    "name": "엥겔바트 ABC 작업",
+    "description": "더글러스 엥겔바트의 작업 구분 3단계 — A/B/C 프레임워크 내부 피칭",
+    "hasPresentation": true
   }
 ]

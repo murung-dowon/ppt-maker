@@ -322,7 +322,7 @@
 
   async function loadSlides(projectId) {
     try {
-      const res = await fetch(`${projectId}/slides.json`);
+      const res = await fetch(`PPTs/${projectId}/slides.json`);
       const data = await res.json();
       // slides.json 포맷 두 가지 대응: Array 또는 { slides: [] }
       if (Array.isArray(data)) return data;
@@ -338,7 +338,7 @@
   }
 
   function viewerUrl(project, file) {
-    return `${VIEWER}?project=${encodeURIComponent(project)}&file=${encodeURIComponent(file)}`;
+    return `${VIEWER}?project=${encodeURIComponent('PPTs/' + project)}&file=${encodeURIComponent(file)}`;
   }
 
   async function renderProject(project, idx, container) {

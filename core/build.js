@@ -23,7 +23,11 @@ if (projectIdx === -1 || !args[projectIdx + 1]) {
 
 const projectName = args[projectIdx + 1];
 const ROOT = path.resolve(__dirname, '..');
-const PROJECT_DIR = path.join(ROOT, projectName);
+const PPTS_DIR = path.join(ROOT, 'PPTs');
+// PPTs/ 하위에서 먼저 찾고, 없으면 ROOT 직접 경로 시도
+const PROJECT_DIR = fs.existsSync(path.join(PPTS_DIR, projectName))
+  ? path.join(PPTS_DIR, projectName)
+  : path.join(ROOT, projectName);
 const CORE_DIR = path.join(ROOT, 'core');
 const DIST_DIR = path.join(PROJECT_DIR, 'dist');
 
@@ -325,6 +329,21 @@ ${slideBlocks.map((s, i) => `
 <script>
 /* ── editor.js ───────────────────────────────── */
 ${editorJS}
+</script>
+
+<script>
+/* ── autoprint: viewer에서 PDF 버튼 클릭 시 자동 실행 ── */
+if (new URLSearchParams(location.search).get('autoprint') === '1') {
+  window.addEventListener('load', function () {
+    setTimeout(function () {
+      if (typeof window._pptExportPDF === 'function') {
+        window._pptExportPDF();
+      } else {
+        window.print();
+      }
+    }, 600);
+  });
+}
 </script>
 
 </body>

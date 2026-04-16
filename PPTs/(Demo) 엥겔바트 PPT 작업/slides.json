@@ -1,0 +1,9 @@
+[
+  { "file": "slide-01-title.html",   "title": "표지" },
+  { "file": "slide-02-overview.html","title": "A/B/C 작업 3단계 개요" },
+  { "file": "slide-03-a-work.html",  "title": "A 작업 — 각자 맡은 일 잘 하기" },
+  { "file": "slide-04-diagnosis.html","title": "현재 진단 — 잘 하고 있을까?" },
+  { "file": "slide-05-b-work.html",  "title": "B 작업 — 일하는 방식 개선" },
+  { "file": "slide-06-b-action.html","title": "B 작업 실행 방안" },
+  { "file": "slide-07-c-work.html",  "title": "C 작업 — 지속 발전 체계" }
+]
